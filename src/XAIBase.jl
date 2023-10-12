@@ -26,6 +26,11 @@ include("analyze.jl")
 # Shared heatmapping default settings are defined in this file.
 include("heatmap_presets.jl")
 
+export AbstractXAIMethod
+export AbstractNeuronSelector
+export Explanation
+export analyze
+
 # Package extension backwards compatibility with Julia 1.6.
 # For Julia 1.6, VisionHeatmaps.jl and TextHeatmaps.jl are treated as normal dependencies and always loaded.
 # https://pkgdocs.julialang.org/v1/creating-packages/#Transition-from-normal-dependency-to-extension
@@ -33,10 +38,4 @@ if !isdefined(Base, :get_extension)
     # include("../ext/VisionHeatmapsExt.jl")
     include("../ext/XAITextHeatmapsExt.jl")
 end
-
-export AbstractXAIMethod
-export AbstractNeuronSelector
-export Explanation
-export analyze
-
 end #module
