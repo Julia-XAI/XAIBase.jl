@@ -23,12 +23,7 @@ function heatmap(
     )
     _reduce, rangescale, colorscheme = get_heatmap_settings(expl; kwargs...)
 
-    T = Vector{eltype(expl.val)}
-    return [
-        # heatmap(v, t; rangescale, colorscheme) for # TODO: add colorscheme
-        heatmap(v, t; rangescale) for
-        (v, t) in zip(eachcol(x), texts)
-    ]
+    return [heatmap(v, t; rangescale, colorscheme) for (v, t) in zip(eachcol(x), texts)]
 end
 
 function get_heatmap_settings(expl::Explanation; kwargs...)
