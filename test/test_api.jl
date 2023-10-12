@@ -17,12 +17,12 @@ ns = XAIBase.MaxActivationSelector()
 val = [3 36; 6 30; 9 24]
 
 expl = analyze(input, analyzer)
-@assert expl.val == val
+@test expl.val == val
 
 # Ouput selection
 output_neuron = 2
 val = [2 30; 4 25; 6 20]
 
 expl = analyze(input, analyzer, output_neuron)
-@assert expl.val == val
-@assert isnothing(expl.extras)
+@test expl.val == val
+@test isnothing(expl.extras)
