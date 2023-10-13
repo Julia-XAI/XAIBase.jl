@@ -18,6 +18,8 @@ val = [3 36; 6 30; 9 24]
 
 expl = analyze(input, analyzer)
 @test expl.val == val
+expl = analyzer(input)
+@test expl.val == val
 
 # Ouput selection
 output_neuron = 2
@@ -26,3 +28,5 @@ val = [2 30; 4 25; 6 20]
 expl = analyze(input, analyzer, output_neuron)
 @test expl.val == val
 @test isnothing(expl.extras)
+expl = analyzer(input, output_neuron)
+@test expl.val == val

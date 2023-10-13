@@ -29,13 +29,3 @@ function (s::IndexSelector{I})(out::AbstractArray{T,N}) where {I,T,N}
     batchsize = size(out, N)
     return [CartesianIndex{N}(s.index..., b) for b in 1:batchsize]
 end
-
-"""
-    AugmentationSelector(index)
-
-Neuron selector that passes through an augmented neuron selection.
-"""
-struct AugmentationSelector{I} <: AbstractNeuronSelector
-    indices::I
-end
-(s::AugmentationSelector)(out) = s.indices

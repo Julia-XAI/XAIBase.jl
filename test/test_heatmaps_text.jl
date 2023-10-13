@@ -8,6 +8,10 @@ h = heatmap(expl, text)
 @test_reference "references/Gradient1.txt" repr("text/plain", h[1])
 @test_reference "references/Gradient2.txt" repr("text/plain", h[2])
 
+expl = Explanation(val[:, 1:1], output[:, 1:1], neuron_selection[1], :Gradient)
+h = heatmap(expl, text[1])
+@test_reference "references/Gradient1.txt" repr("text/plain", h)
+
 expl = Explanation(val, output, neuron_selection, :LRP)
 h = heatmap(expl, text)
 @test_reference "references/LRP1.txt" repr("text/plain", h[1])
