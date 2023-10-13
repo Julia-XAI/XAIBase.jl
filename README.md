@@ -27,7 +27,7 @@ It also allows you to use input-augmentations from [ExplainableAI.jl][url-explai
     to return additional information
 * XAI methods need to implement a single function 
   ```julia
-  (method::AbstractXAIMethod)(input, output_selector::AbstractNeuronSelector)::Explanation
+  (method::MyMethod)(input, output_selector::AbstractNeuronSelector)::Explanation
   ```
   * `AbstractNeuronSelector`s are predefined callable structs 
     that select a single scalar value from a model's output, 
@@ -42,7 +42,7 @@ struct MyMethod{M} <: AbstractXAIMethod
     model::M    
 end
 
-function (method::MyMethod)(input, output_selector::AbstractNeuronSelector)::Explanation
+function (method::MyMethod)(input, output_selector::AbstractNeuronSelector)
     output = method.model(input)
     output_selection = output_selector(output)
 
