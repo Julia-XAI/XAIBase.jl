@@ -3,7 +3,7 @@ module XAIBase
 # Abstract super type of all XAI methods.
 # Is expected that all methods are callable types that return an `Explanation`:
 #
-#   (method::AbstractXAIMethod)(input, neuron_selector::AbstractNeuronSelector)::Explanation
+#   (method::AbstractXAIMethod)(input, output_selector::AbstractNeuronSelector)::Explanation
 #
 # If this function is implemented, XAIBase will provide the `analyze` and `heatmap` functionality.
 abstract type AbstractXAIMethod end
@@ -17,7 +17,7 @@ include("explanation.jl")
 
 # User-facing API of XAI methods.
 # This file defines the `analyze` function at the core of Julia-XAI methods,
-# which in turn calls `(method)(input, neuron_selector)`.
+# which in turn calls `(method)(input, output_selector)`.
 include("analyze.jl")
 
 # Heatmapping presets used in package extensions.
