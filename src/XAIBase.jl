@@ -35,7 +35,7 @@ export analyze
 # For Julia 1.6, VisionHeatmaps.jl and TextHeatmaps.jl are treated as normal dependencies and always loaded.
 # https://pkgdocs.julialang.org/v1/creating-packages/#Transition-from-normal-dependency-to-extension
 if !isdefined(Base, :get_extension)
-    # include("../ext/VisionHeatmapsExt.jl")
     include("../ext/XAITextHeatmapsExt.jl")
+    include("../ext/XAIVisionHeatmapsExt.jl")
 end
 end #module

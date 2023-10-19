@@ -18,8 +18,12 @@ using Aqua
         @info "Testing neuron selection..."
         include("test_neuron_selection.jl")
     end
+    @testset "VisionHeatmaps" begin
+        @info "Testing VisionHeatmaps extension..."
+        include("test_heatmaps_vision.jl")
+    end
     @testset "TextHeatmaps" begin
-        @info "Testing text heatmaps..."
+        @info "Testing TextHeatmaps extension..."
         include("test_heatmaps_text.jl")
     end
 end
