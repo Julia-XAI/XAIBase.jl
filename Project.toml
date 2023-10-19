@@ -5,13 +5,17 @@ version = "1.0.0"
 
 [deps]
 TextHeatmaps = "2dd6718a-6083-4824-b9f7-90e4a57f72d2"
+VisionHeatmaps = "27106da1-f8bc-4ca8-8c66-9b8289f1e035"
 
 [weakdeps]
 TextHeatmaps = "2dd6718a-6083-4824-b9f7-90e4a57f72d2"
+VisionHeatmaps = "27106da1-f8bc-4ca8-8c66-9b8289f1e035"
 
 [extensions]
 XAITextHeatmapsExt = "TextHeatmaps"
+XAIVisionHeatmapsExt = "VisionHeatmaps"
 
 [compat]
 TextHeatmaps = "1.1"
+VisionHeatmaps = "1.1"
 julia = "1.6"
