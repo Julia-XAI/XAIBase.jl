@@ -43,8 +43,8 @@ Visualize `Explanation` from XAIBase as a vision heatmap.
 Assumes WHCN convention (width, height, channels, batchsize) for `explanation.val`.
 
 ## Keyword arguments
-- `colorscheme::Union{ColorScheme,Symbol}`: Color scheme from ColorSchemes.jl.
-  Defaults to `seismic`.
+- `colorscheme::Union{ColorScheme,Symbol}`: color scheme from ColorSchemes.jl.
+  Defaults to `:$DEFAULT_COLORSCHEME`.
 - `reduce::Symbol`: Selects how color channels are reduced to a single number to apply a color scheme.
   The following methods can be selected, which are then applied over the color channels
   for each "pixel" in the array:
@@ -80,7 +80,7 @@ end
 #===============#
 
 """
-    textheatmap(explanation, text)
+    heatmap(explanation, text)
 
 Visualize `Explanation` from XAIBase as text heatmap.
 Text should be a vector containing vectors of strings, one for each input in the batched explanation.
@@ -92,7 +92,7 @@ Text should be a vector containing vectors of strings, one for each input in the
   before the color scheme is applied. Can be either `:extrema` or `:centered`.
   Defaults to `:$DEFAULT_RANGESCALE` for use with the default color scheme `:$DEFAULT_COLORSCHEME`.
 """
-function textheatmap(
+function heatmap(
     expl::Explanation, texts::AbstractVector{<:AbstractVector{<:AbstractString}}; kwargs...
 )
     ndims(expl.val) != 2 && throw(
@@ -113,6 +113,6 @@ function textheatmap(
     ]
 end
 
-function textheatmap(expl::Explanation, text::AbstractVector{<:AbstractString}; kwargs...)
-    return textheatmap(expl, [text]; kwargs...)
+function heatmap(expl::Explanation, text::AbstractVector{<:AbstractString}; kwargs...)
+    return heatmap(expl, [text]; kwargs...)
 end

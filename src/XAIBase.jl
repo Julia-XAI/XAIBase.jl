@@ -33,5 +33,5 @@ export AbstractXAIMethod
 export AbstractNeuronSelector
 export Explanation
 export analyze
-export heatmap, textheatmap
+export heatmap
 end #module
