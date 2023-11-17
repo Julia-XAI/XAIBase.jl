@@ -12,20 +12,18 @@ const DEFAULT_HEATMAP_PRESET = HeatmapConfig(
 )
 
 const HEATMAP_PRESETS = Dict{Symbol,HeatmapConfig}(
-    :LRP                => HeatmapConfig(:seismic, :sum, :centered), # attribution
-    :CRP                => HeatmapConfig(:seismic, :sum, :centered), # attribution
-    :InputTimesGradient => HeatmapConfig(:seismic, :sum, :centered), # attribution
-    :Gradient           => HeatmapConfig(:grays, :norm, :extrema),  # sensitivity
+    :attribution => HeatmapConfig(:seismic, :sum, :centered),
+    :sensitivity => HeatmapConfig(:grays, :norm, :extrema),
 )
 
-# Select HeatmapConfig preset based on analyzer
-function get_heatmapping_config(analyzer::Symbol)
-    return get(HEATMAP_PRESETS, analyzer, DEFAULT_HEATMAP_PRESET)
+# Select HeatmapConfig preset based on heatmapping style in Explanation
+function get_heatmapping_config(heatmap::Symbol)
+    return get(HEATMAP_PRESETS, heatmap, DEFAULT_HEATMAP_PRESET)
 end
 
 # Override HeatmapConfig preset with keyword arguments
 function get_heatmapping_config(expl::Explanation; kwargs...)
-    c = get_heatmapping_config(expl.analyzer)
+    c = get_heatmapping_config(expl.heatmap)
 
     colorscheme = get(kwargs, :colorscheme, c.colorscheme)
     rangescale  = get(kwargs, :rangescale, c.rangescale)
