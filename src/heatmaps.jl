@@ -14,6 +14,7 @@ const DEFAULT_HEATMAP_PRESET = HeatmapConfig(
 const HEATMAP_PRESETS = Dict{Symbol,HeatmapConfig}(
     :attribution => HeatmapConfig(:seismic, :sum, :centered),
     :sensitivity => HeatmapConfig(:grays, :norm, :extrema),
+    :cam         => HeatmapConfig(:jet, :sum, :extrema),
 )
 
 # Select HeatmapConfig preset based on heatmapping style in Explanation
