@@ -19,6 +19,6 @@ struct Explanation{V,O,S,E<:Union{Nothing,NamedTuple}}
     heatmap::Symbol
     extras::E
 end
-function Explanation(val, output, output_selection, analyzer, heatmap)
+function Explanation(val, output, output_selection, analyzer::Symbol, heatmap::Symbol)
     return Explanation(val, output, output_selection, analyzer, heatmap, nothing)
 end
