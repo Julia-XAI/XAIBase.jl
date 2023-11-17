@@ -26,9 +26,12 @@ include("analyze.jl")
 # Heatmapping for vision and NLP tasks.
 include("heatmaps.jl")
 
+# To be removed in next breaking release:
+include("deprecated.jl")
+
 export AbstractXAIMethod
 export AbstractNeuronSelector
 export Explanation
 export analyze
-export heatmap, textheatmap
+export heatmap
 end #module
