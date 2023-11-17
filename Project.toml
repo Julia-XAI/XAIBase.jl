@@ -1,19 +1,11 @@
 name = "XAIBase"
 uuid = "9b48221d-a747-4c1b-9860-46a1d8ba24a7"
 authors = ["Adrian Hill <gh@adrianhill.de>"]
-version = "1.0.0"
+version = "2.0.0-DEV"
 
 [deps]
 TextHeatmaps = "2dd6718a-6083-4824-b9f7-90e4a57f72d2"
 VisionHeatmaps = "27106da1-f8bc-4ca8-8c66-9b8289f1e035"
-
-[weakdeps]
-TextHeatmaps = "2dd6718a-6083-4824-b9f7-90e4a57f72d2"
-VisionHeatmaps = "27106da1-f8bc-4ca8-8c66-9b8289f1e035"
-
-[extensions]
-XAITextHeatmapsExt = "TextHeatmaps"
-XAIVisionHeatmapsExt = "VisionHeatmaps"
 
 [compat]
 TextHeatmaps = "1.1"

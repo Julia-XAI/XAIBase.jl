@@ -1,5 +1,8 @@
 module XAIBase
 
+using TextHeatmaps
+using VisionHeatmaps
+
 # Abstract super type of all XAI methods.
 # Is expected that all methods are callable types that return an `Explanation`:
 #
@@ -20,22 +23,12 @@ include("explanation.jl")
 # which in turn calls `(method)(input, output_selector)`.
 include("analyze.jl")
 
-# Heatmapping presets used in package extensions.
-# To keep dependencies minimal, heatmapping functionality is loaded via package extensions
-# on VisionHeatmaps.jl and TextHeatmaps.jl in the `/ext` folder.
-# Shared heatmapping default settings are defined in this file.
-include("heatmap_presets.jl")
+# Heatmapping for vision and NLP tasks.
+include("heatmaps.jl")
 
 export AbstractXAIMethod
 export AbstractNeuronSelector
 export Explanation
 export analyze
-
-# Package extension backwards compatibility with Julia 1.6.
-# For Julia 1.6, VisionHeatmaps.jl and TextHeatmaps.jl are treated as normal dependencies and always loaded.
-# https://pkgdocs.julialang.org/v1/creating-packages/#Transition-from-normal-dependency-to-extension
-if !isdefined(Base, :get_extension)
-    include("../ext/XAITextHeatmapsExt.jl")
-    include("../ext/XAIVisionHeatmapsExt.jl")
-end
+export heatmap, textheatmap
 end #module
