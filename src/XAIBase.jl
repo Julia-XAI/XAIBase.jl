@@ -3,6 +3,9 @@ module XAIBase
 using TextHeatmaps
 using VisionHeatmaps
 
+include("compat.jl")
+include("utils.jl")
+
 # Abstract super type of all XAI methods.
 # Is expected that all methods are callable types that return an `Explanation`:
 #
