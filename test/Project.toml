@@ -8,4 +8,3 @@ VisionHeatmaps = "27106da1-f8bc-4ca8-8c66-9b8289f1e035"
 
 [compat]
 Aqua = "0.8"
-TextHeatmaps = "1.0.0"
