@@ -1,4 +1,7 @@
 # XAIBase.jl
+## Version `v1.2.0`
+* ![Feature][badge-feature] Add API for direct heatmapping ([#9][pr-9])
+
 ## Version `v1.1.1`
 * ![Bugfix][badge-bugfix] Fix keyword argument `add_batch_dim` ([#8][pr-8])
 
@@ -22,6 +25,7 @@ This release makes VisionHeatmaps.jl and TextHeatmaps.jl strong dependencies of 
 ![Documentation][badge-docs]
 -->
 
+[pr-9]: https://github.com/Julia-XAI/XAIBase.jl/pull/9
 [pr-8]: https://github.com/Julia-XAI/XAIBase.jl/pull/8
 [pr-6]: https://github.com/Julia-XAI/XAIBase.jl/pull/6
 [pr-5]: https://github.com/Julia-XAI/XAIBase.jl/pull/5
