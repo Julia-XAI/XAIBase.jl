@@ -75,6 +75,23 @@ function heatmap(expl::Explanation; kwargs...)
     )
 end
 
+"""
+    heatmap(input, analyzer)
+
+Compute an `Explanation` for a given `input` using the method `analyzer` and visualize it
+as a vision heatmap.
+
+Any additional arguments and keyword arguments are passed to the analyzer.
+Refer to [`analyze`](@ref) for more information on available keyword arguments.
+
+To customize the heatmapping style, first compute an explanation using [`analyze`](@ref)
+and then call [`heatmap`](@ref) on the explanation.
+"""
+function heatmap(input, analyzer::AbstractXAIMethod, args...; kwargs...)
+    expl = analyze(input, analyzer, args...; kwargs...)
+    return heatmap(expl)
+end
+
 #===============#
 # Text Heatmaps #
 #===============#
