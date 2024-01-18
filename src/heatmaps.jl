@@ -39,7 +39,7 @@ end
 """
     heatmap(explanation)
 
-Visualize `Explanation` from XAIBase as a vision heatmap.
+Visualize [`Explanation`](@ref) from XAIBase as a vision heatmap.
 Assumes WHCN convention (width, height, channels, batchsize) for `explanation.val`.
 
 ## Keyword arguments
@@ -78,7 +78,7 @@ end
 """
     heatmap(input, analyzer)
 
-Compute an `Explanation` for a given `input` using the method `analyzer` and visualize it
+Compute an [`Explanation`](@ref) for a given `input` using the method `analyzer` and visualize it
 as a vision heatmap.
 
 Any additional arguments and keyword arguments are passed to the analyzer.
@@ -99,7 +99,7 @@ end
 """
     heatmap(explanation, text)
 
-Visualize `Explanation` from XAIBase as text heatmap.
+Visualize [`Explanation`](@ref) from XAIBase as text heatmap.
 Text should be a vector containing vectors of strings, one for each input in the batched explanation.
 
 ## Keyword arguments

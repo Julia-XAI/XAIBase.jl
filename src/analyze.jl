@@ -9,7 +9,8 @@ const BATCHDIM_MISSING = ArgumentError(
     analyze(input, method, neuron_selection)
 
 Apply the analyzer `method` for the given input, returning an [`Explanation`](@ref).
-If `neuron_selection` is specified, the explanation will be calculated for that neuron.
+If `neuron_selection` is specified, e.g. the index of a specific output neuron,
+the explanation will be calculated for that neuron.
 Otherwise, the output neuron with the highest activation is automatically chosen.
 
 See also [`Explanation`](@ref) and [`heatmap`](@ref).
