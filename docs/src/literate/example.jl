@@ -42,7 +42,7 @@ model
 
 # ## Preparing the model
 # For models with softmax activations on the output,
-# it is necessary to call [`strip_softmax`](@ref) before analyzing.
+# it is necessary to call ExplainableAI's `strip_softmax` before analyzing.
 model = strip_softmax(model);
 
 # ## Preparing the input data
