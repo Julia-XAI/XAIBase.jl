@@ -1,5 +1,6 @@
 # XAIBase.jl
-
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://Julia-XAI.github.io/XAIBase.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://Julia-XAI.github.io/XAIDocs/dev/)
 [![Build Status](https://github.com/Julia-XAI/XAIBase.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/Julia-XAI/XAIBase.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/Julia-XAI/XAIBase.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/Julia-XAI/XAIBase.jl)
 [![Aqua](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
@@ -23,6 +24,8 @@ It also allows you to use input-augmentations from [ExplainableAI.jl][url-explai
     e.g. an output neuron corresponding to a specific class in a classification model
   * `analyzer`: symbol corresponding the used analyzer, e.g. `:Gradient` or `:MyMethod`.
     This is primarily used to define heatmapping presets
+  * `heatmap`: symbol indicating a preset heatmapping style,
+    e.g. `:attibution`, `:sensitivity` or `:cam`
   * `extras`: optional named tuple that can be used by analyzers
     to return additional information
 * XAI methods need to implement a single function 
@@ -48,13 +51,17 @@ function (method::MyMethod)(input, output_selector::AbstractNeuronSelector)
 
     val = ...         # your method's implementation
     extras = nothing  # or some additional information
-    return Explanation(val, output, output_selection, :MyMethod, extras)
+    return Explanation(val, output, output_selection, :MyMethod, :sensitivity, extras)
 end
 ```
 
 For more information, take a look at `src/XAIBase.jl`.
 
+## Acknowledgements
+> Adrian Hill acknowledges support by the Federal Ministry of Education and Research (BMBF) 
+> for the Berlin Institute for the Foundations of Learning and Data (BIFOLD) (01IS18037A).
+
+<!-- URLs -->
 [url-org]:https://github.com/Julia-XAI
 [url-explainableai]: https://github.com/Julia-XAI/ExplainableAI.jl
-
 [docs-extensions]: https://pkgdocs.julialang.org/v1/creating-packages/#Conditional-loading-of-code-in-packages-(Extensions)
