@@ -1,4 +1,8 @@
 # XAIBase.jl
+## Version `v1.3.0`
+* ![Feature][badge-feature] Add feature selectors ([#12][pr-12])
+* ![Documentation][badge-docs] Add documentation ([#11][pr-11])
+
 ## Version `v1.2.0`
 * ![Feature][badge-feature] Add API for direct heatmapping ([#9][pr-9])
 
@@ -25,6 +29,8 @@ This release makes VisionHeatmaps.jl and TextHeatmaps.jl strong dependencies of 
 ![Documentation][badge-docs]
 -->
 
+[pr-12]: https://github.com/Julia-XAI/XAIBase.jl/pull/12
+[pr-11]: https://github.com/Julia-XAI/XAIBase.jl/pull/11
 [pr-9]: https://github.com/Julia-XAI/XAIBase.jl/pull/9
 [pr-8]: https://github.com/Julia-XAI/XAIBase.jl/pull/8
 [pr-6]: https://github.com/Julia-XAI/XAIBase.jl/pull/6

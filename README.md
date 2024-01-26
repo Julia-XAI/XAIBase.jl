@@ -1,5 +1,5 @@
 # XAIBase.jl
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://Julia-XAI.github.io/XAIBase.jl/stable/)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://julia-xai.github.io/XAIDocs/XAIBase/stable/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://Julia-XAI.github.io/XAIBase.jl/dev/)
 [![Build Status](https://github.com/Julia-XAI/XAIBase.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/Julia-XAI/XAIBase.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/Julia-XAI/XAIBase.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/Julia-XAI/XAIBase.jl)
@@ -62,6 +62,6 @@ For more information, take a look at `src/XAIBase.jl`.
 > for the Berlin Institute for the Foundations of Learning and Data (BIFOLD) (01IS18037A).
 
 <!-- URLs -->
-[url-org]:https://github.com/Julia-XAI
+[url-org]: https://github.com/Julia-XAI
 [url-explainableai]: https://github.com/Julia-XAI/ExplainableAI.jl
 [docs-extensions]: https://pkgdocs.julialang.org/v1/creating-packages/#Conditional-loading-of-code-in-packages-(Extensions)
