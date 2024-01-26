@@ -29,6 +29,9 @@ include("analyze.jl")
 # Heatmapping for vision and NLP tasks.
 include("heatmaps.jl")
 
+# Utilities for XAI methods that compute Explanations w.r.t. specific features:
+include("feature_selection.jl")
+
 # To be removed in next breaking release:
 include("deprecated.jl")
 
@@ -37,4 +40,5 @@ export AbstractNeuronSelector
 export Explanation
 export analyze
 export heatmap
+export IndexedFeatures, TopNFeatures
 end #module

@@ -15,6 +15,12 @@ Explanation
 heatmap
 ```
 
+## Feature selection
+```@docs
+IndexedFeatures
+TopNFeatures
+```
+
 ## Internals
 Neuron selectors:
 ```@docs
