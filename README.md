@@ -25,7 +25,7 @@ It also allows you to use input-augmentations from [ExplainableAI.jl][url-explai
   * `analyzer`: symbol corresponding the used analyzer, e.g. `:Gradient` or `:MyMethod`.
     This is primarily used to define heatmapping presets
   * `heatmap`: symbol indicating a preset heatmapping style,
-    e.g. `:attibution`, `:sensitivity` or `:cam`
+    e.g. `:attribution`, `:sensitivity` or `:cam`
   * `extras`: optional named tuple that can be used by analyzers
     to return additional information
 * XAI methods need to implement a single function 
