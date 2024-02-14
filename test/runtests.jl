@@ -2,11 +2,16 @@ using XAIBase
 using Test
 using ReferenceTests
 using Aqua
+using JuliaFormatter
 
 @testset "XAIBase.jl" begin
     @testset "Aqua.jl" begin
         @info "Running Aqua.jl's auto quality assurance tests. These might print warnings from dependencies."
         Aqua.test_all(XAIBase; ambiguities=false)
+    end
+    @testset "JuliaFormatter.jl" begin
+        @info "Running JuliaFormatter's code formatting tests."
+        @test format(XAIBase; verbose=false, overwrite=false)
     end
     @testset "API" begin
         @info "Testing API..."
