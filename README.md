@@ -16,26 +16,25 @@ allowing you to automatically compute heatmaps for vision and language models.
 It also allows you to use input-augmentations from [ExplainableAI.jl][url-explainableai].
 
 ## Interface description
-This only requires you to fulfill the following two requirements:
+XAIBase only requires you to fulfill the following two requirements:
 
-1. An XAI method has to be a subtype of `AbstractXAIMethod`
-2. An XAI method has to implement the following method: 
+1. An XAI algorithm has to be a subtype of [`AbstractXAIMethod`][docs-abstractxaimethod]
+2. An XAI algorithm has to implement the following method: 
 
 ```julia
 (method::MyMethod)(input, output_selector::AbstractOutputSelector)
 ```
 
-* The method has to return an [`Explanation`][docs-explanation]
-* The input is expected to have a batch dimensions as its last dimension
-* When applied to a batch, the method returns a single [`Explanation`][docs-explanation], 
+* the method has to return an [`Explanation`][docs-explanation]
+* the input is expected to have a batch dimensions as its last dimension
+* when applied to a batch, the method returns a single [`Explanation`][docs-explanation], 
   which contains the batched output in the `val` field.
-* `AbstractOutputSelector`s are predefined callable structs 
-  that select a single scalar value from a model's output, 
-  e.g. the maximally activated output of a classifier using [`XAIBase.MaxActivationSelector`][docs-maxactivationselector]
-  or a specific output using [`XAIBase.IndexSelector`][docs-indexselector].
+* [`AbstractOutputSelector`][docs-abstractoutputselector]
+  are predefined callable structs that select scalar values from a model's output, 
+  e.g. the maximally activated output of a classifier using [`MaxActivationSelector`][docs-maxactivationselector].
 
 Refer to the [`Explanation`][docs-explanation] documentation for a description of the expected fields.
-For more information, take a look at [`src/XAIBase.jl`](https://github.com/Julia-XAI/XAIBase.jl/blob/main/src/XAIBase.jl).
+For more information, take a look at the [documentation][docs].
 
 ## Example implementation
 Julia-XAI methods will usually follow the following template:
@@ -50,8 +49,8 @@ function (method::MyMethod)(input, output_selector::AbstractOutputSelector)
     output_selection = output_selector(output)
 
     val = ...         # your method's implementation
-    extras = nothing  # or some additional information
-    return Explanation(val, output, output_selection, :MyMethod, :sensitivity, extras)
+    extras = nothing  # optionally add additional information using a named tuple
+    return Explanation(val, output, output_selection, :MyMethod, :attribution, extras)
 end
 ```
 
@@ -69,5 +68,7 @@ end
 [docs-extensions]: https://pkgdocs.julialang.org/v1/creating-packages/#Conditional-loading-of-code-in-packages-(Extensions)
 [docs]: https://julia-xai.github.io/XAIDocs/XAIBase/stable/
 [docs-explanation]: https://julia-xai.github.io/XAIDocs/XAIBase/stable/api/#XAIBase.Explanation
+[docs-abstractxaimethod]: https://julia-xai.github.io/XAIDocs/XAIBase/stable/api/#XAIBase.AbstractXAIMethod
+[docs-abstractoutputselector]: https://julia-xai.github.io/XAIDocs/XAIBase/stable/api/#XAIBase.AbstractOutputSelector
 [docs-maxactivationselector]: https://julia-xai.github.io/XAIDocs/XAIBase/stable/api/#XAIBase.MaxActivationSelector
 [docs-indexselector]: https://julia-xai.github.io/XAIDocs/XAIBase/stable/api/#XAIBase.IndexSelector
