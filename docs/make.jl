@@ -8,8 +8,9 @@ makedocs(;
     format   = Documenter.HTML(; prettyurls=get(ENV, "CI", "false") == "true", assets=String[]),
     #! format: off
     pages = [
-        "XAIBase Interface" => "index.md",
-        "API Reference"     => "api.md"
+        "XAIBase Interface"       => "index.md",
+        "Example Implementations" => "examples.md",
+        "API Reference"           => "api.md"
     ],
     #! format: on
     linkcheck = true,
