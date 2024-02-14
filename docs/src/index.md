@@ -23,8 +23,8 @@ This only requires you to fulfill the following two requirements:
   which contains the batched output in the `val` field.
 * `AbstractOutputSelector`s are predefined callable structs 
   that select a single scalar value from a model's output, 
-  e.g. the maximally activated output of a classifier using [`XAIBase.MaxActivationSelector`](@ref)
-  or a specific output using [`XAIBase.IndexSelector`](@ref).
+  e.g. the maximally activated output of a classifier using [`MaxActivationSelector`](@ref)
+  or a specific output using [`IndexSelector`](@ref).
 
 Refer to the [`Explanation`](@ref) documentation for a description of the expected fields.
 For more information, take a look at [`src/XAIBase.jl`](https://github.com/Julia-XAI/XAIBase.jl/blob/main/src/XAIBase.jl).

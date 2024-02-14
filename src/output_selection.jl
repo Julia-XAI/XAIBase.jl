@@ -1,11 +1,14 @@
+const NOTE_OUTPUT_SELECTOR = """## Note
+XAIBase assumes that the batch dimension is the last dimension of the output.
+"""
+
 """
 Abstract super type of all output selectors in XAIBase.
 
 Output selectors are expected to be callable and to return a vector of `CartesianIndex`
 of the selected outputs.
 
-## Note
-XAIBase assumes that the batch dimension is the last dimension of the output.
+$NOTE_OUTPUT_SELECTOR
 """
 abstract type AbstractOutputSelector end
 
@@ -14,8 +17,7 @@ abstract type AbstractOutputSelector end
 
 Output selector that picks the output with the highest activation.
 
-## Note
-XAIBase assumes that the batch dimension is the last dimension of the output.
+$NOTE_OUTPUT_SELECTOR
 
 ## Example
 ```julia-repl
@@ -47,8 +49,7 @@ end
 
 Output selector that picks the output at the given index.
 
-## Note
-XAIBase assumes that the batch dimension is the last dimension of the output.
+$NOTE_OUTPUT_SELECTOR
 
 ## Example
 ```julia-repl
@@ -67,8 +68,6 @@ julia> output_selector(output)
   CartesianIndex(1, 2)
   CartesianIndex(1, 3)
 ```
-
-Note that XAIBase's output selectors assume that the batch dimension comes last.
 """
 struct IndexSelector{I} <: AbstractOutputSelector
     index::I
