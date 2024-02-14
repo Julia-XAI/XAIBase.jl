@@ -1,6 +1,6 @@
 # Create dummy analyzer to test API and heatmapping
 struct DummyAnalyzer <: AbstractXAIMethod end
-function (method::DummyAnalyzer)(input, output_selector::AbstractNeuronSelector)
+function (method::DummyAnalyzer)(input, output_selector::AbstractOutputSelector)
     output = input
     output_selection = output_selector(output)
     batchsize = size(input)[end]

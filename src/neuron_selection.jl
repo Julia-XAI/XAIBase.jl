@@ -1,11 +1,11 @@
-abstract type AbstractNeuronSelector end
+abstract type AbstractOutputSelector end
 
 """
     MaxActivationSelector()
 
-Neuron selector that picks the output neuron with the highest activation.
+Output selector that picks the output with the highest activation.
 """
-struct MaxActivationSelector <: AbstractNeuronSelector end
+struct MaxActivationSelector <: AbstractOutputSelector end
 function (::MaxActivationSelector)(out::AbstractArray{T,N}) where {T,N}
     N < 2 && throw(BATCHDIM_MISSING)
     return vec(argmax(out; dims=1:(N - 1)))
@@ -14,9 +14,9 @@ end
 """
     IndexSelector(index)
 
-Neuron selector that picks the output neuron at the given index.
+Output selector that picks the output at the given index.
 """
-struct IndexSelector{I} <: AbstractNeuronSelector
+struct IndexSelector{I} <: AbstractOutputSelector
     index::I
 end
 function (s::IndexSelector{<:Integer})(out::AbstractArray{T,N}) where {T,N}

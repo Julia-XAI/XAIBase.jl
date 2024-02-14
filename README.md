@@ -30,11 +30,11 @@ It also allows you to use input-augmentations from [ExplainableAI.jl][url-explai
     to return additional information
 * XAI methods need to implement a single function 
   ```julia
-  (method::MyMethod)(input, output_selector::AbstractNeuronSelector)::Explanation
+  (method::MyMethod)(input, output_selector::AbstractOutputSelector)::Explanation
   ```
-  * `AbstractNeuronSelector`s are predefined callable structs 
+  * `AbstractOutputSelector`s are predefined callable structs 
     that select a single scalar value from a model's output, 
-    e.g. the maximally activated output neuron of a classifier using `MaxActivationSelector`
+    e.g. the maximally activated output of a classifier using `MaxActivationSelector`
   * The input is expected to have a batch dimensions as its last dimension
   * When applied to a batch, the method returns a single `Explanation`, 
     which contains the batched output in the `val` field.
@@ -45,7 +45,7 @@ struct MyMethod{M} <: AbstractXAIMethod
     model::M    
 end
 
-function (method::MyMethod)(input, output_selector::AbstractNeuronSelector)
+function (method::MyMethod)(input, output_selector::AbstractOutputSelector)
     output = method.model(input)
     output_selection = output_selector(output)
 

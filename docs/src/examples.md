@@ -34,7 +34,7 @@ struct RandomAnalyzer{M} <: AbstractXAIMethod
     model::M    
 end
 
-function (method::RandomAnalyzer)(input, output_selector::AbstractNeuronSelector)
+function (method::RandomAnalyzer)(input, output_selector::AbstractOutputSelector)
     output = method.model(input)
     output_selection = output_selector(output)
 
@@ -65,7 +65,7 @@ struct MyGradient{M} <: AbstractXAIMethod
     model::M    
 end
 
-function (method::MyGradient)(input, output_selector::AbstractNeuronSelector)
+function (method::MyGradient)(input, output_selector::AbstractOutputSelector)
     output = method.model(input)
     output_selection = output_selector(output)
 

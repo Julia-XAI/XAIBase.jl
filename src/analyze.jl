@@ -46,7 +46,7 @@ end
 function _analyze(
     input::AbstractArray{T,N},
     method::AbstractXAIMethod,
-    sel::AbstractNeuronSelector;
+    sel::AbstractOutputSelector;
     add_batch_dim::Bool=false,
     kwargs...,
 ) where {T<:Real,N}
