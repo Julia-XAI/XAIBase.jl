@@ -2,14 +2,14 @@
 # Single input
 shape = (2, 2, 3, 1)
 val = output = reshape(collect(Float32, 1:prod(shape)), shape)
-neuron_selection = [CartesianIndex(1, 2)] # irrelevant
-expl = Explanation(val, output, [neuron_selection], :LRP, :attribution)
+output_selection = [CartesianIndex(1, 2)] # irrelevant
+expl = Explanation(val, output, [output_selection], :LRP, :attribution)
 
 # Batch
 shape = (2, 2, 3, 2)
 val = output = reshape(collect(Float32, 1:prod(shape)), shape)
-neuron_selection = [CartesianIndex(1, 2), CartesianIndex(3, 4)] # irrelevant
-expl_batch = Explanation(val, output, neuron_selection, :LRP, :attribution)
+output_selection = [CartesianIndex(1, 2), CartesianIndex(3, 4)] # irrelevant
+expl_batch = Explanation(val, output, output_selection, :LRP, :attribution)
 
 reducers = [:sum, :maxabs, :norm]
 rangescales = [:extrema, :centered]

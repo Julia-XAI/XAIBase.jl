@@ -6,12 +6,11 @@ const BATCHDIM_MISSING = ArgumentError(
 
 """
     analyze(input, method)
-    analyze(input, method, neuron_selection)
+    analyze(input, method, output_selection)
 
 Apply the analyzer `method` for the given input, returning an [`Explanation`](@ref).
-If `neuron_selection` is specified, e.g. the index of a specific output neuron,
-the explanation will be calculated for that neuron.
-Otherwise, the output neuron with the highest activation is automatically chosen.
+If `output_selection` is specified, the explanation will be calculated for that output.
+Otherwise, the output with the highest activation is automatically chosen.
 
 See also [`Explanation`](@ref) and [`heatmap`](@ref).
 
@@ -21,10 +20,10 @@ See also [`Explanation`](@ref) and [`heatmap`](@ref).
 function analyze(
     input::AbstractArray{<:Real},
     method::AbstractXAIMethod,
-    neuron_selection::Union{Integer,Tuple{<:Integer}};
+    output_selection::Union{Integer,Tuple{<:Integer}};
     kwargs...,
 )
-    return _analyze(input, method, IndexSelector(neuron_selection); kwargs...)
+    return _analyze(input, method, IndexSelector(output_selection); kwargs...)
 end
 
 function analyze(input::AbstractArray{<:Real}, method::AbstractXAIMethod; kwargs...)
@@ -33,10 +32,10 @@ end
 
 function (method::AbstractXAIMethod)(
     input::AbstractArray{<:Real},
-    neuron_selection::Union{Integer,Tuple{<:Integer}};
+    output_selection::Union{Integer,Tuple{<:Integer}};
     kwargs...,
 )
-    return _analyze(input, method, IndexSelector(neuron_selection); kwargs...)
+    return _analyze(input, method, IndexSelector(output_selection); kwargs...)
 end
 function (method::AbstractXAIMethod)(input::AbstractArray{<:Real}; kwargs...)
     return _analyze(input, method, MaxActivationSelector(); kwargs...)

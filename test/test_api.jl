@@ -26,17 +26,17 @@ expl = analyzer(input_vec; add_batch_dim=true)
 @test expl.val == val[:, 1:1]
 
 # Ouput selection
-output_neuron = 2
+output_index = 2
 val = [2 30; 4 25; 6 20]
 
-expl = analyze(input, analyzer, output_neuron)
+expl = analyze(input, analyzer, output_index)
 @test expl.val == val
 @test isnothing(expl.extras)
-expl = analyzer(input, output_neuron)
+expl = analyzer(input, output_index)
 @test expl.val == val
 
 # Ouput selection + add_batch_dim
-expl = analyzer(input_vec, output_neuron; add_batch_dim=true)
+expl = analyzer(input_vec, output_index; add_batch_dim=true)
 @test expl.val == val[:, 1:1]
 
 # Test direct heatmapping

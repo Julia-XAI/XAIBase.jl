@@ -21,7 +21,7 @@ It also allows you to use input-augmentations from [ExplainableAI.jl][url-explai
   * `val`: numerical output of the analyzer, e.g. an attribution or gradient in input space
   * `output`: model output for the given analyzer input
   * `output_selection`: index of the output used for the explanation, 
-    e.g. an output neuron corresponding to a specific class in a classification model
+    e.g. an output corresponding to a specific class in a classification model
   * `analyzer`: symbol corresponding the used analyzer, e.g. `:Gradient` or `:MyMethod`.
     This is primarily used to define heatmapping presets
   * `heatmap`: symbol indicating a preset heatmapping style,
