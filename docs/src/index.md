@@ -29,7 +29,9 @@ This only requires you to fulfill the following two requirements:
 Refer to the [`Explanation`](@ref) documentation for a description of the expected fields.
 For more information, take a look at [`src/XAIBase.jl`](https://github.com/Julia-XAI/XAIBase.jl/blob/main/src/XAIBase.jl).
 
-## Example implementation
+## Implementation template 
+Julia-XAI methods will usually follow the following template:
+
 ```julia
 struct MyMethod{M} <: AbstractXAIMethod 
     model::M    
@@ -44,3 +46,5 @@ function (method::MyMethod)(input, output_selector::AbstractNeuronSelector)
     return Explanation(val, output, output_selection, :MyMethod, :attribution, extras)
 end
 ```
+
+Refer to the [example implementations](@ref examples) for more information.

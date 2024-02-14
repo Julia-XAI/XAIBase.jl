@@ -1,4 +1,5 @@
-## Using analyzers
+# API Reference
+## Computing explanations
 Most methods in the Julia-XAI ecosystem work by calling `analyze` on an input and an analyzer:
 ```@docs
 analyze
@@ -22,7 +23,7 @@ TopNFeatures
 ```
 
 ## Internals
-Neuron selectors:
+### Output selection
 ```@docs
 XAIBase.MaxActivationSelector
 XAIBase.IndexSelector
