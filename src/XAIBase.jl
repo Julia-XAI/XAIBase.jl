@@ -41,9 +41,9 @@ include("feature_selection.jl")
 include("deprecated.jl")
 
 export AbstractXAIMethod
-export AbstractOutputSelector
 export Explanation
 export analyze
 export heatmap
-export IndexedFeatures, TopNFeatures
+export AbstractOutputSelector, MaxActivationSelector, IndexSelector
+export AbstractFeatureSelector, IndexedFeatures, TopNFeatures
 end #module
