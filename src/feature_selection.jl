@@ -1,7 +1,22 @@
+const NOTE_FEATURE_SELECTOR = """## Note
+The XAIBase interface currently assumes that features have either 2 or 4 dimensions
+(`(features, batchsize)` or `(width, height, features, batchsize)`).
+
+It also assumes that the batch dimension is the last dimension of the feature.
+"""
+
+"""
+Abstract super type of all feature selectors in XAIBase.
+
+Feature selectors are expected to be callable and to return a vector of `CartesianIndices`
+for each selected feature.
+
+$NOTE_FEATURE_SELECTOR
+"""
 abstract type AbstractFeatureSelector end
 
 # Expected interfaces:
-# - Calls to feature selector that return a list of lists of CartesianIndices
+# - Calls to feature selector that return a list of lists of `CartesianIndices`
 #   - (c::FeatureSelector)(R::AbstractArray{T,N}) where {T,2}
 #   - (c::FeatureSelector)(R::AbstractArray{T,N}) where {T,4}
 # - number_of_features(c::FeatureSelector)
@@ -14,6 +29,27 @@ Select features by indices.
 For outputs of convolutional layers, the index refers to a feature dimension.
 
 See also See also [`TopNFeatures`](@ref).
+
+$NOTE_FEATURE_SELECTOR
+
+## Example
+```julia-repl
+julia> feature_selector = IndexedFeatures(2, 3)
+ IndexedFeatures(2, 3)
+
+julia> feature = rand(3, 3, 3, 2);
+
+julia> feature_selector(feature)
+2-element Vector{Vector{CartesianIndices{4, NTuple{4, UnitRange{Int64}}}}}:
+ [CartesianIndices((1:3, 1:3, 2:2, 1:1)), CartesianIndices((1:3, 1:3, 2:2, 2:2))]
+ [CartesianIndices((1:3, 1:3, 3:3, 1:1)), CartesianIndices((1:3, 1:3, 3:3, 2:2))]
+
+julia> feature = rand(3, 2);
+
+julia> feature_selector(feature)
+ 1-element Vector{Vector{CartesianIndices{2, Tuple{UnitRange{Int64}, UnitRange{Int64}}}}}:
+  [CartesianIndices((2:2, 1:1)), CartesianIndices((2:2, 2:2))]
+```
 """
 struct IndexedFeatures{N} <: AbstractFeatureSelector
     inds::NTuple{N,Int}
@@ -53,6 +89,32 @@ For outputs of convolutional layers, the relevance is summed across height and w
 channels for each feature.
 
 See also [`IndexedFeatures`](@ref).
+
+$NOTE_FEATURE_SELECTOR
+
+## Example
+```julia-repl
+julia> feature_selector = TopNFeatures(2)
+ TopNFeatures(2)
+
+julia> feature = rand(3, 2)
+3×2 Matrix{Float64}:
+ 0.265312  0.953689
+ 0.674377  0.172154
+ 0.649722  0.570809
+
+julia> feature_selector(feature)
+2-element Vector{Vector{CartesianIndices{2, Tuple{UnitRange{Int64}, UnitRange{Int64}}}}}:
+ [CartesianIndices((2:2, 1:1)), CartesianIndices((1:1, 2:2))]
+ [CartesianIndices((3:3, 1:1)), CartesianIndices((3:3, 2:2))]
+
+julia> feature = rand(3, 3, 3, 2);
+
+julia> feature_selector(feature)
+2-element Vector{Vector{CartesianIndices{4, NTuple{4, UnitRange{Int64}}}}}:
+ [CartesianIndices((1:3, 1:3, 2:2, 1:1)), CartesianIndices((1:3, 1:3, 1:1, 2:2))]
+ [CartesianIndices((1:3, 1:3, 1:1, 1:1)), CartesianIndices((1:3, 1:3, 3:3, 2:2))]
+```
 """
 struct TopNFeatures <: AbstractFeatureSelector
     n::Int

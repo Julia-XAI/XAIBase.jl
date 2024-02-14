@@ -1,4 +1,8 @@
 # API Reference
+```@docs
+AbstractXAIMethod
+```
+
 ## Computing explanations
 Most methods in the Julia-XAI ecosystem work by calling `analyze` on an input and an analyzer:
 ```@docs
@@ -18,15 +22,16 @@ heatmap
 
 ## Feature selection
 ```@docs
+AbstractFeatureSelector
 IndexedFeatures
 TopNFeatures
 ```
 
-## Internals
-### Output selection
+## Output selection
 ```@docs
-XAIBase.MaxActivationSelector
-XAIBase.IndexSelector
+AbstractOutputSelector
+MaxActivationSelector
+IndexSelector
 ```
 
 ## Index
