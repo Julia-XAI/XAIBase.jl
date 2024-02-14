@@ -33,9 +33,4 @@ using JuliaFormatter
         @info "Testing text heatmaps..."
         include("test_textheatmap.jl")
     end
-    @testset "Deprecations" begin
-        # To be removed in next breaking release
-        @info "Testing deprecations..."
-        include("test_deprecated.jl")
-    end
 end

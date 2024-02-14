@@ -37,9 +37,6 @@ include("heatmaps.jl")
 # Utilities for XAI methods that compute Explanations w.r.t. specific features:
 include("feature_selection.jl")
 
-# To be removed in next breaking release:
-include("deprecated.jl")
-
 export AbstractXAIMethod
 export Explanation
 export analyze
