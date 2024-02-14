@@ -1,4 +1,10 @@
 # XAIBase.jl
+## Version `v2.0.0`
+* ![BREAKING][badge-breaking] Rename `AbstractNeuronSelector` to `AbstractOutputSelector` ([#14][pr-14])
+* ![Feature][badge-feature] Export output selectors ([#15][pr-15])
+* ![Documentation][badge-docs] Add example implementations of XAI methods ([#13][pr-13])
+* ![Documentation][badge-docs] Improved documentation of output and feature selectors ([#15][pr-15])
+
 ## Version `v1.3.0`
 * ![Feature][badge-feature] Add feature selectors ([#12][pr-12])
 * ![Documentation][badge-docs] Add documentation ([#11][pr-11])
@@ -29,6 +35,9 @@ This release makes VisionHeatmaps.jl and TextHeatmaps.jl strong dependencies of 
 ![Documentation][badge-docs]
 -->
 
+[pr-15]: https://github.com/Julia-XAI/XAIBase.jl/pull/15
+[pr-14]: https://github.com/Julia-XAI/XAIBase.jl/pull/14
+[pr-13]: https://github.com/Julia-XAI/XAIBase.jl/pull/13
 [pr-12]: https://github.com/Julia-XAI/XAIBase.jl/pull/12
 [pr-11]: https://github.com/Julia-XAI/XAIBase.jl/pull/11
 [pr-9]: https://github.com/Julia-XAI/XAIBase.jl/pull/9
