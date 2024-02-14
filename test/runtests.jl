@@ -14,7 +14,7 @@ using Aqua
     end
     @testset "Output selection" begin
         @info "Testing output selection..."
-        include("test_neuron_selection.jl")
+        include("test_output_selection.jl")
     end
     @testset "Feature selection" begin
         @info "Testing feature selection..."

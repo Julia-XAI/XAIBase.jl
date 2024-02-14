@@ -21,7 +21,7 @@ abstract type AbstractXAIMethod end
 
 # Output selectors of type `AbstractOutputSelector` for class-specific input-space explanations.
 # These are used to automatically select the maximally activated output.
-include("neuron_selection.jl")
+include("output_selection.jl")
 
 # Return type `Explanation` expected of `AbstractXAIMethod`s.
 include("explanation.jl")
