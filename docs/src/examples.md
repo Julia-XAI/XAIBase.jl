@@ -89,7 +89,7 @@ heatmap(expl)
 ```
 
 ```@example implementations
-heatmap(expl, reduce=:norm, colorscheme=:twilight)
+heatmap(expl, colorscheme=:twilight, reduce=:norm, rangescale=:centered)
 ```
 
 and make use of all the features provided by the Julia-XAI ecosystem.

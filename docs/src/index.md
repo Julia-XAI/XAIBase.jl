@@ -1,7 +1,7 @@
 ## [Interface description](@id docs-interface)
 
 XAIBase.jl is a light-weight dependency that defines the interface of XAI methods 
-in the [Julia-XAI ecosystem](https://julia-xai.github.io/XAIDocs).
+in the [Julia-XAI ecosystem](https://julia-xai.github.io/XAIDocs/).
 
 Building on top of XAIBase 
 (or providing an interface via [package extensions](https://pkgdocs.julialang.org/v1/creating-packages/#Conditional-loading-of-code-in-packages-(Extensions)))
