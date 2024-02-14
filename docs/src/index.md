@@ -14,17 +14,17 @@ This only requires you to fulfill the following two requirements:
 2. An XAI method has to implement the following method: 
 
 ```julia
-(method::MyMethod)(input, output_selector::AbstractNeuronSelector)
+(method::MyMethod)(input, output_selector::AbstractOutputSelector)
 ```
 
 * The method has to return an [`Explanation`](@ref)
 * The input is expected to have a batch dimensions as its last dimension
 * When applied to a batch, the method returns a single [`Explanation`](@ref), 
   which contains the batched output in the `val` field.
-* `AbstractNeuronSelector`s are predefined callable structs 
+* `AbstractOutputSelector`s are predefined callable structs 
   that select a single scalar value from a model's output, 
-  e.g. the maximally activated output neuron of a classifier using [`XAIBase.MaxActivationSelector`](@ref)
-  or a specific output neuron using [`XAIBase.IndexSelector`](@ref).
+  e.g. the maximally activated output of a classifier using [`XAIBase.MaxActivationSelector`](@ref)
+  or a specific output using [`XAIBase.IndexSelector`](@ref).
 
 Refer to the [`Explanation`](@ref) documentation for a description of the expected fields.
 For more information, take a look at [`src/XAIBase.jl`](https://github.com/Julia-XAI/XAIBase.jl/blob/main/src/XAIBase.jl).
@@ -37,7 +37,7 @@ struct MyMethod{M} <: AbstractXAIMethod
     model::M    
 end
 
-function (method::MyMethod)(input, output_selector::AbstractNeuronSelector)
+function (method::MyMethod)(input, output_selector::AbstractOutputSelector)
     output = method.model(input)
     output_selection = output_selector(output)
 

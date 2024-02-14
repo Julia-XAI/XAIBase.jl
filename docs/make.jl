@@ -14,6 +14,7 @@ makedocs(;
     ],
     #! format: on
     linkcheck = true,
+    warnonly = [:missing_docs],
     checkdocs = :exports, # only check docstrings in API reference if they are exported
 )
 

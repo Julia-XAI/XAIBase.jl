@@ -6,17 +6,22 @@ using VisionHeatmaps
 include("compat.jl")
 include("utils.jl")
 
-# Abstract super type of all XAI methods.
-# Is expected that all methods are callable types that return an `Explanation`:
-#
-#   (method::AbstractXAIMethod)(input, output_selector::AbstractNeuronSelector)::Explanation
-#
-# If this function is implemented, XAIBase will provide the `analyze` and `heatmap` functionality.
+"""
+Abstract super type of all XAI methods.
+
+It is expected that all XAI methods are callable types that return an `Explanation`:
+
+```julia
+(method::AbstractXAIMethod)(input, output_selector::AbstractOutputSelector)
+```
+
+If this function is implemented, XAIBase will provide the `analyze` and `heatmap` functionality.
+"""
 abstract type AbstractXAIMethod end
 
-# Output neuron selectors of type `AbstractNeuronSelector` for class-specific input-space explanations.
-# These are used to e.g. automatically select the maximally activated output neuron.
-include("neuron_selection.jl")
+# Output selectors of type `AbstractOutputSelector` for class-specific explanations.
+# These are used to automatically select the maximally activated output.
+include("output_selection.jl")
 
 # Return type `Explanation` expected of `AbstractXAIMethod`s.
 include("explanation.jl")
@@ -36,7 +41,7 @@ include("feature_selection.jl")
 include("deprecated.jl")
 
 export AbstractXAIMethod
-export AbstractNeuronSelector
+export AbstractOutputSelector
 export Explanation
 export analyze
 export heatmap

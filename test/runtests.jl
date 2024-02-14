@@ -12,9 +12,9 @@ using Aqua
         @info "Testing API..."
         include("test_api.jl")
     end
-    @testset "Neuron selection" begin
-        @info "Testing neuron selection..."
-        include("test_neuron_selection.jl")
+    @testset "Output selection" begin
+        @info "Testing output selection..."
+        include("test_output_selection.jl")
     end
     @testset "Feature selection" begin
         @info "Testing feature selection..."
