@@ -12,7 +12,9 @@ In simpler terms, methods that try to answer the question
 
 Building on top of XAIBase (or providing an interface via [package extensions][docs-extensions])
 makes your package compatible with the Julia-XAI ecosystem,
-allowing you to automatically compute heatmaps for vision and language models. 
+allowing you to automatically compute heatmaps for vision and language models
+using [VisionHeatmaps.jl](https://julia-xai.github.io/XAIDocs/VisionHeatmaps/stable/)
+and [TextHeatmaps.jl](https://julia-xai.github.io/XAIDocs/TextHeatmaps/stable/).
 It also allows you to use input-augmentations from [ExplainableAI.jl][url-explainableai].
 
 ## Interface description

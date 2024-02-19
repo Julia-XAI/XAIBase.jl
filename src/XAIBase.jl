@@ -1,8 +1,5 @@
 module XAIBase
 
-using TextHeatmaps
-using VisionHeatmaps
-
 include("compat.jl")
 include("utils.jl")
 
@@ -15,7 +12,8 @@ It is expected that all XAI methods are callable types that return an `Explanati
 (method::AbstractXAIMethod)(input, output_selector::AbstractOutputSelector)
 ```
 
-If this function is implemented, XAIBase will provide the `analyze` and `heatmap` functionality.
+If this function is implemented, XAIBase will provide the `analyze` functionality
+and `heatmap` functionality by loading either VisionHeatmaps.jl or TextHeatmaps.jl.
 """
 abstract type AbstractXAIMethod end
 
@@ -31,16 +29,12 @@ include("explanation.jl")
 # which in turn calls `(method)(input, output_selector)`.
 include("analyze.jl")
 
-# Heatmapping for vision and NLP tasks.
-include("heatmaps.jl")
-
 # Utilities for XAI methods that compute Explanations w.r.t. specific features:
 include("feature_selection.jl")
 
 export AbstractXAIMethod
 export Explanation
 export analyze
-export heatmap
 export AbstractOutputSelector, MaxActivationSelector, IndexSelector
 export AbstractFeatureSelector, IndexedFeatures, TopNFeatures
 end #module

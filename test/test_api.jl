@@ -1,4 +1,4 @@
-# Create dummy analyzer to test API and heatmapping
+# Create dummy analyzer to test API
 struct DummyAnalyzer <: AbstractXAIMethod end
 function (method::DummyAnalyzer)(input, output_selector::AbstractOutputSelector)
     output = input
@@ -38,24 +38,3 @@ expl = analyzer(input, output_index)
 # Ouput selection + add_batch_dim
 expl = analyzer(input_vec, output_index; add_batch_dim=true)
 @test expl.val == val[:, 1:1]
-
-# Test direct heatmapping
-input = rand(5, 5, 3, 1)
-
-h1 = heatmap(analyze(input, analyzer))
-h2 = heatmap(input, analyzer)
-@test h1 == h2
-
-h1 = heatmap(analyze(input, analyzer, 5))
-h2 = heatmap(input, analyzer, 5)
-@test h1 == h2
-
-input = rand(5, 5, 3)
-
-h1 = heatmap(analyze(input, analyzer; add_batch_dim=true))
-h2 = heatmap(input, analyzer; add_batch_dim=true)
-@test h1 == h2
-
-h1 = heatmap(analyze(input, analyzer, 5; add_batch_dim=true))
-h2 = heatmap(input, analyzer, 5; add_batch_dim=true)
-@test h1 == h2
