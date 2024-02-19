@@ -1,4 +1,10 @@
 # XAIBase.jl
+## Version `v3.0.0`
+* ![BREAKING][badge-breaking] Remove heatmapping functionality. 
+  Users are now required to manually load either 
+  [VisionHeatmaps.jl](https://julia-xai.github.io/XAIDocs/VisionHeatmaps/stable/) or
+  [TextHeatmaps.jl](https://julia-xai.github.io/XAIDocs/TextHeatmaps/stable/). ([#16][pr-16])
+
 ## Version `v2.0.0`
 * ![BREAKING][badge-breaking] Rename `AbstractNeuronSelector` to `AbstractOutputSelector` ([#14][pr-14])
 * ![Feature][badge-feature] Export output selectors ([#15][pr-15])
@@ -35,6 +41,7 @@ This release makes VisionHeatmaps.jl and TextHeatmaps.jl strong dependencies of 
 ![Documentation][badge-docs]
 -->
 
+[pr-16]: https://github.com/Julia-XAI/XAIBase.jl/pull/16
 [pr-15]: https://github.com/Julia-XAI/XAIBase.jl/pull/15
 [pr-14]: https://github.com/Julia-XAI/XAIBase.jl/pull/14
 [pr-13]: https://github.com/Julia-XAI/XAIBase.jl/pull/13
