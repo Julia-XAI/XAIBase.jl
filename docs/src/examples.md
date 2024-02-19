@@ -44,11 +44,9 @@ end
 ```
 
 We can directly use XAIBase's `analyze` function 
-to compute and visualize the random explanation:
+to compute the random explanation:
 
 ```@example implementations
-using VisionHeatmaps # load heatmapping functionality
-
 analyzer = RandomAnalyzer(model)
 expl = analyze(input, analyzer)
 ```

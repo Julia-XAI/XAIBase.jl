@@ -1,4 +1,4 @@
-# Create dummy analyzer to test API and heatmapping
+# Create dummy analyzer to test API
 struct DummyAnalyzer <: AbstractXAIMethod end
 function (method::DummyAnalyzer)(input, output_selector::AbstractOutputSelector)
     output = input

@@ -6,7 +6,9 @@ in the [Julia-XAI ecosystem](https://julia-xai.github.io/XAIDocs/).
 Building on top of XAIBase 
 (or providing an interface via [package extensions](https://pkgdocs.julialang.org/v1/creating-packages/#Conditional-loading-of-code-in-packages-(Extensions)))
 makes your package compatible with the Julia-XAI ecosystem,
-allowing you to automatically compute heatmaps for vision and language models. 
+allowing you to automatically compute heatmaps for vision and language models
+using [VisionHeatmaps.jl](https://julia-xai.github.io/XAIDocs/VisionHeatmaps/stable/)
+and [TextHeatmaps.jl](https://julia-xai.github.io/XAIDocs/TextHeatmaps/stable/).
 
 This only requires you to fulfill the following two requirements:
 

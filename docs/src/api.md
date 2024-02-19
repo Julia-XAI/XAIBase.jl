@@ -14,12 +14,6 @@ The return type of `analyze` is an `Explanation`:
 Explanation
 ```
 
-## Visualizing explanations
-`Explanation`s can be visualized using `heatmap`:
-```@docs
-heatmap
-```
-
 ## Feature selection
 ```@docs
 AbstractFeatureSelector
