@@ -43,12 +43,25 @@ function (method::RandomAnalyzer)(input, output_selector::AbstractOutputSelector
 end
 ```
 
-We can directly use XAIBase's `analyze` and `heatmap` functions 
+We can directly use XAIBase's `analyze` function 
 to compute and visualize the random explanation:
 
 ```@example implementations
+using VisionHeatmaps # load heatmapping functionality
+
 analyzer = RandomAnalyzer(model)
-heatmap(input, analyzer)
+expl = analyze(input, analyzer)
+```
+
+Using either [VisionHeatmaps.jl](https://julia-xai.github.io/XAIDocs/VisionHeatmaps/stable/)
+or [TextHeatmaps.jl](https://julia-xai.github.io/XAIDocs/TextHeatmaps/stable/),
+which provide package extensions on XAIBase's `Explanation` type,
+we can visualize the explanations:
+
+```@example implementations
+using VisionHeatmaps # load heatmapping functionality
+
+heatmap(expl.val)
 ```
 
 As expected, the explanation is just noise.
@@ -81,15 +94,17 @@ end
     that works with batched inputs and only requires a single forward 
     and backward pass through the model.
 
-Once again, we can directly use XAIBase's `analyze` and `heatmap` functions
+Once again, we can directly use XAIBase's `analyze` and VisionHeatmaps' `heatmap` functions
 ```@example implementations
+using VisionHeatmaps 
+
 analyzer = MyGradient(model)
 expl = analyze(input, analyzer)
-heatmap(expl)
+heatmap(expl.val)
 ```
 
 ```@example implementations
-heatmap(expl, colorscheme=:twilight, reduce=:norm, rangescale=:centered)
+heatmap(expl.val, colorscheme=:twilight, reduce=:norm, rangescale=:centered)
 ```
 
 and make use of all the features provided by the Julia-XAI ecosystem.
