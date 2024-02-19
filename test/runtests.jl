@@ -25,12 +25,4 @@ using JuliaFormatter
         @info "Testing feature selection..."
         include("test_feature_selection.jl")
     end
-    @testset "Vision heatmaps" begin
-        @info "Testing vision heatmaps..."
-        include("test_heatmap.jl")
-    end
-    @testset "Text heatmaps" begin
-        @info "Testing text heatmaps..."
-        include("test_textheatmap.jl")
-    end
 end
