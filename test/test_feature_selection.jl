@@ -1,3 +1,6 @@
+using XAIBase
+using Test
+
 @testset "Feature selectors" begin
     @testset "API" begin
         features = TopNFeatures(15)
