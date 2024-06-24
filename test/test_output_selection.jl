@@ -1,3 +1,6 @@
+using XAIBase
+using Test
+
 using XAIBase: MaxActivationSelector, IndexSelector
 using Random
 

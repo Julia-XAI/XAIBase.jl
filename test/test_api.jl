@@ -1,3 +1,6 @@
+using XAIBase
+using Test
+
 # Create dummy analyzer to test API
 struct DummyAnalyzer <: AbstractXAIMethod end
 function (method::DummyAnalyzer)(input, output_selector::AbstractOutputSelector)
