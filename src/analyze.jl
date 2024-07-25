@@ -18,7 +18,7 @@ See also [`Explanation`](@ref).
 - `add_batch_dim`: add batch dimension to the input without allocating. Default is `false`.
 """
 function analyze(
-    input::AbstractArray{<:Real},
+    input,
     method::AbstractXAIMethod,
     output_selection::Union{Integer,Tuple{<:Integer}};
     kwargs...,
@@ -26,24 +26,22 @@ function analyze(
     return _analyze(input, method, IndexSelector(output_selection); kwargs...)
 end
 
-function analyze(input::AbstractArray{<:Real}, method::AbstractXAIMethod; kwargs...)
+function analyze(input, method::AbstractXAIMethod; kwargs...)
     return _analyze(input, method, MaxActivationSelector(); kwargs...)
 end
 
 function (method::AbstractXAIMethod)(
-    input::AbstractArray{<:Real},
-    output_selection::Union{Integer,Tuple{<:Integer}};
-    kwargs...,
+    input, output_selection::Union{Integer,Tuple{<:Integer}}; kwargs...
 )
     return _analyze(input, method, IndexSelector(output_selection); kwargs...)
 end
-function (method::AbstractXAIMethod)(input::AbstractArray{<:Real}; kwargs...)
+function (method::AbstractXAIMethod)(input; kwargs...)
     return _analyze(input, method, MaxActivationSelector(); kwargs...)
 end
 
 # lower-level call to method
 function _analyze(
-    input::AbstractArray{T,N},
+    input,
     method::AbstractXAIMethod,
     sel::AbstractOutputSelector;
     add_batch_dim::Bool=false,
@@ -52,6 +50,5 @@ function _analyze(
     if add_batch_dim
         return method(batch_dim_view(input), sel; kwargs...)
     end
-    N < 2 && throw(BATCHDIM_MISSING)
     return method(input, sel; kwargs...)
 end
