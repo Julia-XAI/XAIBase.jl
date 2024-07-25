@@ -22,13 +22,15 @@ It also allows you to use input-augmentations from [ExplainableAI.jl][url-explai
 XAIBase only requires you to fulfill the following two requirements:
 
 1. An XAI algorithm has to be a subtype of [`AbstractXAIMethod`][docs-abstractxaimethod]
-2. An XAI algorithm has to implement the following method: 
+2. An XAI algorithm has to implement a `call_analyzer` method: 
 
 ```julia
-(method::MyMethod)(input, output_selector::AbstractOutputSelector)
+import XAIBase: call_analyzer
+
+call_analyzer(input, method::MyMethod, output_selector::AbstractOutputSelector; kwargs...)
 ```
 
-* the method has to return an [`Explanation`][docs-explanation]
+* `call_analyzer` has to return an [`Explanation`][docs-explanation]
 * the input is expected to have a batch dimensions as its last dimension
 * when applied to a batch, the method returns a single [`Explanation`][docs-explanation], 
   which contains the batched output in the `val` field.
@@ -43,17 +45,20 @@ For more information, take a look at the [documentation][docs].
 Julia-XAI methods will usually follow the following template:
 
 ```julia
+using XAIBase
+import XAIBase: call_analyzer
+
 struct MyMethod{M} <: AbstractXAIMethod 
     model::M    
 end
 
-function (method::MyMethod)(input, output_selector::AbstractOutputSelector)
+function call_analyzer(input, method::MyMethod, output_selector::AbstractOutputSelector; kwargs...)
     output = method.model(input)
     output_selection = output_selector(output)
 
     val = ...         # your method's implementation
     extras = nothing  # optionally add additional information using a named tuple
-    return Explanation(val, output, output_selection, :MyMethod, :attribution, extras)
+    return Explanation(val, input, output, output_selection, :MyMethod, :attribution, extras)
 end
 ```
 
