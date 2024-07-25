@@ -13,14 +13,17 @@ Return type of analyzers when calling [`analyze`](@ref).
 * `extras`: optional named tuple that can be used by analyzers
     to return additional information.
 """
-struct Explanation{V,O,S,E<:Union{Nothing,NamedTuple}}
+struct Explanation{V,I,O,S,E<:Union{Nothing,NamedTuple}}
     val::V
+    input::I
     output::O
     output_selection::S
     analyzer::Symbol
     heatmap::Symbol
     extras::E
 end
-function Explanation(val, output, output_selection, analyzer::Symbol, heatmap::Symbol)
-    return Explanation(val, output, output_selection, analyzer, heatmap, nothing)
+function Explanation(
+    val, input, output, output_selection, analyzer::Symbol, heatmap::Symbol
+)
+    return Explanation(val, input, output, output_selection, analyzer, heatmap, nothing)
 end
