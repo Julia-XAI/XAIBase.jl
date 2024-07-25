@@ -1,9 +1,14 @@
 using XAIBase
 using Test
 
+using XAIBase: AbstractXAIMethod, NotImplementedError
+import XAIBase: call_analyzer
+
 # Create dummy analyzer to test API
 struct DummyAnalyzer <: AbstractXAIMethod end
-function (method::DummyAnalyzer)(input, output_selector::AbstractOutputSelector)
+function call_analyzer(
+    input, ::DummyAnalyzer, output_selector::AbstractOutputSelector; kwargs...
+)
     output = input
     output_selection = output_selector(output)
     batchsize = size(input)[end]
@@ -23,11 +28,6 @@ expl = analyze(input, analyzer)
 expl = analyzer(input)
 @test expl.val == val
 
-# Max activation + add_batch_dim
-input_vec = [1, 2, 3]
-expl = analyzer(input_vec; add_batch_dim=true)
-@test expl.val == val[:, 1:1]
-
 # Ouput selection
 output_index = 2
 val = [2 30; 4 25; 6 20]
@@ -38,6 +38,8 @@ expl = analyze(input, analyzer, output_index)
 expl = analyzer(input, output_index)
 @test expl.val == val
 
-# Ouput selection + add_batch_dim
-expl = analyzer(input_vec, output_index; add_batch_dim=true)
-@test expl.val == val[:, 1:1]
+# Create empty dummy analyzer to test exceptions
+struct EmptyAnalyzer <: AbstractXAIMethod end
+
+analyzer = EmptyAnalyzer()
+@test_throws NotImplementedError analyze(input, analyzer, output_index)
