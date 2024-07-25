@@ -1,8 +1,11 @@
 # XAIBase.jl
 ## Version `v4.0.0`
-* ![BREAKING][badge-breaking] Implementing new analyzers now required implementing a `call_analyzer` method instead of making the analyzer struct callable
-* ![BREAKING][badge-breaking] Add `input` field to `Explanation`
-* ![BREAKING][badge-breaking] Remove `analyze` keyword-argument `add_batch_dim`
+* ![BREAKING][badge-breaking] Implementing new analyzers now requires a `call_analyzer` method instead of making the analyzer struct callable. This helps with type stability ([#20])
+* ![BREAKING][badge-breaking] Add `input` field to `Explanation` struct
+* ![BREAKING][badge-breaking] Remove `analyze` keyword-argument `add_batch_dim`, which made the assumption of array inputs ([#20])
+* ![Feature][badge-feature] Remove type annotations that restricted `analyze` to `AbstractArray` inputs ([#20])
+* ![Maintenance][badge-maintenance] XAIBase is now fully type stable and tested with JET.jl ([#20])
+* ![Maintenance][badge-maintenance] Modularize tests ([#17])
 
 ## Version `v3.0.0`
 * ![BREAKING][badge-breaking] Remove heatmapping functionality. 
@@ -46,6 +49,8 @@ This release makes VisionHeatmaps.jl and TextHeatmaps.jl strong dependencies of 
 ![Documentation][badge-docs]
 -->
 
+[#20]: https://github.com/Julia-XAI/XAIBase.jl/pull/20
+[#17]: https://github.com/Julia-XAI/XAIBase.jl/pull/17
 [#16]: https://github.com/Julia-XAI/XAIBase.jl/pull/16
 [#15]: https://github.com/Julia-XAI/XAIBase.jl/pull/15
 [#14]: https://github.com/Julia-XAI/XAIBase.jl/pull/14
