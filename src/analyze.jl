@@ -9,9 +9,9 @@ Otherwise, the output with the highest activation is automatically chosen.
 See also [`Explanation`](@ref).
 """
 function analyze(
-    input, method::AbstractXAIMethod, output_selection::AbstractOutputSelector; kwargs...
+    input, method::AbstractXAIMethod, output_selector::AbstractOutputSelector; kwargs...
 )
-    return call_analyzer(input, method, output_selection; kwargs...)
+    return call_analyzer(input, method, output_selector; kwargs...)
 end
 function analyze(
     input,
@@ -30,18 +30,18 @@ end
 function (method::AbstractXAIMethod)(input; kwargs...)
     analyze(input, method, MaxActivationSelector(); kwargs...)
 end
-function (method::AbstractXAIMethod)(input, output_selection; kwargs...)
-    analyze(input, method, output_selection; kwargs...)
+function (method::AbstractXAIMethod)(input, output_selector; kwargs...)
+    analyze(input, method, output_selector; kwargs...)
 end
 
 # Throw NotImplementedError as a fallback
 function call_analyzer(
-    input, method::AbstractXAIMethod, sel::AbstractOutputSelector; kwargs...
+    input, method::AbstractXAIMethod, output_selector::AbstractOutputSelector; kwargs...
 )
     return throw(
         NotImplementedError(
             method,
-            "call_analyzer(input, method::T, output_selection::AbstractOutputSelector; kwargs...)",
+            "call_analyzer(input, method::T, output_selector::AbstractOutputSelector; kwargs...)",
         ),
     )
 end
