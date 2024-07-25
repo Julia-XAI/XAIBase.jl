@@ -38,8 +38,29 @@ expl = analyze(input, analyzer, output_index)
 expl = analyzer(input, output_index)
 @test expl.val == val
 
-# Create empty dummy analyzer to test exceptions
+# Dummy analyzer to test exceptions
 struct EmptyAnalyzer <: AbstractXAIMethod end
 
 analyzer = EmptyAnalyzer()
 @test_throws NotImplementedError analyze(input, analyzer, output_index)
+
+# Dummy analyzer to test "unusual" inputs
+struct AnyInputAnalyzer <: AbstractXAIMethod end
+function call_analyzer(
+    input, ::AnyInputAnalyzer, output_selector::AbstractOutputSelector; kwargs...
+)
+    output = 42
+    output_selection = 42
+    val = 42
+    return Explanation(val, input, output, output_selection, :AnyInput, :attribution)
+end
+
+analyzer = AnyInputAnalyzer()
+
+input1 = (foo=1, bar=2) # NamedTuple
+expl1 = analyze(input1, analyzer)
+@test expl1.input isa NamedTuple
+
+input2 = "Hello world" # String
+expl2 = analyze(input2, analyzer)
+@test expl2.input isa String
