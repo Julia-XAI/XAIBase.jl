@@ -3,17 +3,25 @@ using Test
 
 using JuliaFormatter
 using Aqua
+using JuliaFormatter
+using Aqua
+using JET
+using ReferenceTests
 
 @testset "XAIBase.jl" begin
     if VERSION >= v"1.10"
         @info "Testing formalities..."
         @testset "Code formatting" begin
-            @info "- Testing code formatting with JuliaFormatter..."
+            @info "- running JuliaFormatter code formatting tests..."
             @test JuliaFormatter.format(XAIBase; verbose=false, overwrite=false)
         end
         @testset "Aqua.jl" begin
-            @info "- Running Aqua.jl tests. These might print warnings from dependencies..."
+            @info "- running Aqua.jl tests. These might print warnings from dependencies..."
             Aqua.test_all(XAIBase; ambiguities=false)
+        end
+        @testset "JET.jl" begin
+            @info "- running JET.jl type stability tests..."
+            JET.test_package(XAIBase; target_defined_modules=true)
         end
     end
 
