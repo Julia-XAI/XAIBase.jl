@@ -1,6 +1,10 @@
-const NOTE_OUTPUT_SELECTOR = """## Note
+const BATCHDIM_MISSING = ArgumentError(
+    "The input is a 1D vector and therefore missing the required batch dimension."
+)
+
+const NOTE_OUTPUT_SELECTOR = "## Note
 XAIBase assumes that the batch dimension is the last dimension of the output.
-"""
+"
 
 """
 Abstract super type of all output selectors in XAIBase.
