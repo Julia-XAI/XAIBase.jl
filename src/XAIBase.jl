@@ -17,6 +17,8 @@ and `heatmap` functionality by loading either VisionHeatmaps.jl or TextHeatmaps.
 """
 abstract type AbstractXAIMethod end
 
+include("exceptions.jl")
+
 # Output selectors of type `AbstractOutputSelector` for class-specific explanations.
 # These are used to automatically select the maximally activated output.
 include("output_selection.jl")
