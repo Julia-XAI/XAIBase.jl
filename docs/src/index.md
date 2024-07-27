@@ -13,13 +13,15 @@ and [TextHeatmaps.jl](https://julia-xai.github.io/XAIDocs/TextHeatmaps/stable/).
 This only requires you to fulfill the following two requirements:
 
 1. An XAI method has to be a subtype of `AbstractXAIMethod`
-2. An XAI method has to implement the following method: 
+2. An XAI algorithm has to implement a `call_analyzer` method: 
 
 ```julia
-(method::MyMethod)(input, output_selector::AbstractOutputSelector)
+import XAIBase: call_analyzer
+
+call_analyzer(input, method::MyMethod, output_selector::AbstractOutputSelector; kwargs...)
 ```
 
-* The method has to return an [`Explanation`](@ref)
+* `call_analyzer` has to return an [`Explanation`](@ref)
 * The input is expected to have a batch dimensions as its last dimension
 * When applied to a batch, the method returns a single [`Explanation`](@ref), 
   which contains the batched output in the `val` field.
@@ -35,17 +37,20 @@ For more information, take a look at [`src/XAIBase.jl`](https://github.com/Julia
 Julia-XAI methods will usually follow the following template:
 
 ```julia
+using XAIBase
+import XAIBase: call_analyzer
+
 struct MyMethod{M} <: AbstractXAIMethod 
     model::M    
 end
 
-function (method::MyMethod)(input, output_selector::AbstractOutputSelector)
+function call_analyzer(input, method::MyMethod, output_selector::AbstractOutputSelector; kwargs...)
     output = method.model(input)
     output_selection = output_selector(output)
 
     val = ...         # your method's implementation
     extras = nothing  # optionally add additional information using a named tuple
-    return Explanation(val, output, output_selection, :MyMethod, :attribution, extras)
+    return Explanation(val, input, output, output_selection, :MyMethod, :attribution, extras)
 end
 ```
 

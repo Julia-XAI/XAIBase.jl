@@ -2,6 +2,7 @@ using XAIBase
 using Test
 
 using XAIBase: MaxActivationSelector, IndexSelector
+using Test
 using Random
 
 ns_max = @inferred MaxActivationSelector()

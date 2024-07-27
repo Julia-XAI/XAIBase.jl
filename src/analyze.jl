@@ -1,9 +1,3 @@
-
-const BATCHDIM_MISSING = ArgumentError(
-    """The input is a 1D vector and therefore missing the required batch dimension.
-    Call `analyze` with the keyword argument `add_batch_dim=true`."""
-)
-
 """
     analyze(input, method)
     analyze(input, method, output_selection)
@@ -13,45 +7,41 @@ If `output_selection` is specified, the explanation will be calculated for that 
 Otherwise, the output with the highest activation is automatically chosen.
 
 See also [`Explanation`](@ref).
-
-## Keyword arguments
-- `add_batch_dim`: add batch dimension to the input without allocating. Default is `false`.
 """
 function analyze(
-    input::AbstractArray{<:Real},
+    input, method::AbstractXAIMethod, output_selector::AbstractOutputSelector; kwargs...
+)
+    return call_analyzer(input, method, output_selector; kwargs...)
+end
+function analyze(
+    input,
     method::AbstractXAIMethod,
     output_selection::Union{Integer,Tuple{<:Integer}};
     kwargs...,
 )
-    return _analyze(input, method, IndexSelector(output_selection); kwargs...)
+    return call_analyzer(input, method, IndexSelector(output_selection); kwargs...)
 end
 
-function analyze(input::AbstractArray{<:Real}, method::AbstractXAIMethod; kwargs...)
-    return _analyze(input, method, MaxActivationSelector(); kwargs...)
+function analyze(input, method::AbstractXAIMethod; kwargs...)
+    return call_analyzer(input, method, MaxActivationSelector(); kwargs...)
 end
 
-function (method::AbstractXAIMethod)(
-    input::AbstractArray{<:Real},
-    output_selection::Union{Integer,Tuple{<:Integer}};
-    kwargs...,
+# Direct calls to analyzer
+function (method::AbstractXAIMethod)(input; kwargs...)
+    analyze(input, method, MaxActivationSelector(); kwargs...)
+end
+function (method::AbstractXAIMethod)(input, output_selector; kwargs...)
+    analyze(input, method, output_selector; kwargs...)
+end
+
+# Throw NotImplementedError as a fallback
+function call_analyzer(
+    input, method::AbstractXAIMethod, output_selector::AbstractOutputSelector; kwargs...
 )
-    return _analyze(input, method, IndexSelector(output_selection); kwargs...)
-end
-function (method::AbstractXAIMethod)(input::AbstractArray{<:Real}; kwargs...)
-    return _analyze(input, method, MaxActivationSelector(); kwargs...)
-end
-
-# lower-level call to method
-function _analyze(
-    input::AbstractArray{T,N},
-    method::AbstractXAIMethod,
-    sel::AbstractOutputSelector;
-    add_batch_dim::Bool=false,
-    kwargs...,
-) where {T<:Real,N}
-    if add_batch_dim
-        return method(batch_dim_view(input), sel; kwargs...)
-    end
-    N < 2 && throw(BATCHDIM_MISSING)
-    return method(input, sel; kwargs...)
+    return throw(
+        NotImplementedError(
+            method,
+            "call_analyzer(input, method::T, output_selector::AbstractOutputSelector; kwargs...)",
+        ),
+    )
 end
