@@ -3,6 +3,7 @@ using Test
 
 using XAIBase: MaxActivationSelector, IndexSelector
 using Test
+using StableRNGs: StableRNG
 using Random
 
 ns_max = @inferred MaxActivationSelector()
@@ -53,7 +54,7 @@ I_idx = @inferred ns_idx(A)
 
 # 4x3x2 input with Tuple IndexSelector
 ns_idx = @inferred IndexSelector((4, 2))
-A = rand(MersenneTwister(1234), Float32, 4, 3, 2)
+A = rand(StableRNG(1234), Float32, 4, 3, 2)
 R = similar(A)
 
 I_max = @inferred ns_max(A)
@@ -61,8 +62,8 @@ I_idx = @inferred ns_idx(A)
 @test I_max isa Vector{CartesianIndex{3}}
 @test I_idx isa Vector{CartesianIndex{3}}
 @test I_max == [
-    CartesianIndex(2, 1, 1)
-    CartesianIndex(4, 1, 2)
+    CartesianIndex(2, 3, 1)
+    CartesianIndex(4, 3, 2)
 ]
 @test I_idx == [
     CartesianIndex(4, 2, 1)
