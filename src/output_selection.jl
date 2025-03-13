@@ -1,5 +1,5 @@
-const BATCHDIM_MISSING = ArgumentError(
-    "The input is a 1D vector and therefore missing the required batch dimension."
+const BATCHDIM_MISSING_OUTPUT = ArgumentError(
+    "The output is a 1D vector and therefore missing the required batch dimension."
 )
 
 const NOTE_OUTPUT_SELECTOR = "## Note
@@ -44,7 +44,7 @@ julia> output_selector(output)
 """
 struct MaxActivationSelector <: AbstractOutputSelector end
 function (::MaxActivationSelector)(out::AbstractArray{T,N}) where {T,N}
-    N < 2 && throw(BATCHDIM_MISSING)
+    N < 2 && throw(BATCHDIM_MISSING_OUTPUT)
     return vec(argmax(out; dims=1:(N - 1)))
 end
 
@@ -77,12 +77,12 @@ struct IndexSelector{I} <: AbstractOutputSelector
     index::I
 end
 function (s::IndexSelector{<:Integer})(out::AbstractArray{T,N}) where {T,N}
-    N < 2 && throw(BATCHDIM_MISSING)
+    N < 2 && throw(BATCHDIM_MISSING_OUTPUT)
     batchsize = size(out, N)
     return [CartesianIndex{N}(s.index, b) for b in 1:batchsize]
 end
 function (s::IndexSelector{I})(out::AbstractArray{T,N}) where {I,T,N}
-    N < 2 && throw(BATCHDIM_MISSING)
+    N < 2 && throw(BATCHDIM_MISSING_OUTPUT)
     batchsize = size(out, N)
     return [CartesianIndex{N}(s.index..., b) for b in 1:batchsize]
 end
