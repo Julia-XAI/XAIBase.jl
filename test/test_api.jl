@@ -7,8 +7,8 @@ import XAIBase: call_analyzer
 # Create dummy analyzer to test API
 struct DummyAnalyzer <: AbstractXAIMethod end
 function call_analyzer(
-    input, ::DummyAnalyzer, output_selector::AbstractOutputSelector; kwargs...
-)
+        input, ::DummyAnalyzer, output_selector::AbstractOutputSelector; kwargs...
+    )
     output = input
     output_selection = output_selector(output)
     batchsize = size(input)[end]
@@ -47,8 +47,8 @@ analyzer = EmptyAnalyzer()
 # Dummy analyzer to test "unusual" inputs
 struct AnyInputAnalyzer <: AbstractXAIMethod end
 function call_analyzer(
-    input, ::AnyInputAnalyzer, output_selector::AbstractOutputSelector; kwargs...
-)
+        input, ::AnyInputAnalyzer, output_selector::AbstractOutputSelector; kwargs...
+    )
     output = 42
     output_selection = 42
     val = 42
@@ -57,7 +57,7 @@ end
 
 analyzer = AnyInputAnalyzer()
 
-input1 = (foo=1, bar=2) # NamedTuple
+input1 = (foo = 1, bar = 2) # NamedTuple
 expl1 = analyze(input1, analyzer)
 @test expl1.input isa NamedTuple
 
