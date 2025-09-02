@@ -1,9 +1,6 @@
 using XAIBase
 using Test
 
-using JuliaFormatter
-using Aqua
-using JuliaFormatter
 using Aqua
 using JET
 using ReferenceTests
