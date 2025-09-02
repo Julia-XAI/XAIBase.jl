@@ -72,6 +72,14 @@ julia> output_selector(output)
   CartesianIndex(1, 1)
   CartesianIndex(1, 2)
   CartesianIndex(1, 3)
+
+julia> output_selector = IndexSelector((1, 1, 2));
+
+julia> output_selector(output)
+3-element Vector{CartesianIndex{2}}:
+ CartesianIndex(1, 1)
+ CartesianIndex(1, 2)
+ CartesianIndex(2, 3)
 ```
 """
 struct IndexSelector{I <: Union{Integer, Tuple, AbstractArray{<:Integer}}} <: AbstractOutputSelector
