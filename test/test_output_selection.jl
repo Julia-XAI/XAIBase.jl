@@ -8,6 +8,7 @@ using Random
 
 ns_max = @inferred MaxActivationSelector()
 ns_idx = @inferred IndexSelector(4)
+ns_idx_batch = @inferred IndexSelector((1, 1, 2))
 
 # Array
 A = [-2.1694243, 2.4023275, 0.99464744, -0.1514646, 1.0307171]
@@ -18,8 +19,6 @@ R = similar(A)
 
 # 5x1 input
 A = reshape(A, 5, 1)
-R = similar(A)
-
 I_max = @inferred ns_max(A)
 I_idx = @inferred ns_idx(A)
 @test I_max isa Vector{CartesianIndex{2}}
@@ -35,12 +34,14 @@ A = [
     0.170132 0.474743 0.590655
     0.218707 0.0440574 0.962128
 ]
-R = similar(A)
 
 I_max = @inferred ns_max(A)
 I_idx = @inferred ns_idx(A)
+I_idx_batch = @inferred ns_idx_batch(A)
+
 @test I_max isa Vector{CartesianIndex{2}}
 @test I_idx isa Vector{CartesianIndex{2}}
+@test I_idx_batch isa Vector{CartesianIndex{2}}
 @test I_max == [
     CartesianIndex(3, 1)
     CartesianIndex(1, 2)
@@ -51,21 +52,8 @@ I_idx = @inferred ns_idx(A)
     CartesianIndex(4, 2)
     CartesianIndex(4, 3)
 ]
-
-# 4x3x2 input with Tuple IndexSelector
-ns_idx = @inferred IndexSelector((4, 2))
-A = rand(StableRNG(1234), Float32, 4, 3, 2)
-R = similar(A)
-
-I_max = @inferred ns_max(A)
-I_idx = @inferred ns_idx(A)
-@test I_max isa Vector{CartesianIndex{3}}
-@test I_idx isa Vector{CartesianIndex{3}}
-@test I_max == [
-    CartesianIndex(2, 3, 1)
-    CartesianIndex(4, 3, 2)
-]
-@test I_idx == [
-    CartesianIndex(4, 2, 1)
-    CartesianIndex(4, 2, 2)
+@test I_idx_batch == [
+    CartesianIndex(1, 1)
+    CartesianIndex(1, 2)
+    CartesianIndex(2, 3)
 ]
