@@ -1,4 +1,8 @@
 # XAIBase.jl
+## Version `v4.1.0`
+* ![Feature][badge-feature] Refactor `IndexSelector` to support batches ([#22])
+* ![Maintenance][badge-maintenance] Format with Runic ([#22])
+
 ## Version `v4.0.0`
 * ![BREAKING][badge-breaking] Implementing new analyzers now requires a `call_analyzer` method instead of making the analyzer struct callable. This helps with type stability ([#20])
 * ![BREAKING][badge-breaking] Add `input` field to `Explanation` struct
@@ -49,6 +53,7 @@ This release makes VisionHeatmaps.jl and TextHeatmaps.jl strong dependencies of 
 ![Documentation][badge-docs]
 -->
 
+[#22]: https://github.com/Julia-XAI/XAIBase.jl/pull/22
 [#20]: https://github.com/Julia-XAI/XAIBase.jl/pull/20
 [#17]: https://github.com/Julia-XAI/XAIBase.jl/pull/17
 [#16]: https://github.com/Julia-XAI/XAIBase.jl/pull/16
