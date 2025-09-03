@@ -52,7 +52,7 @@ julia> feature_selector(feature)
 ```
 """
 struct IndexedFeatures{N} <: AbstractFeatureSelector
-    inds::NTuple{N,Int}
+    inds::NTuple{N, Int}
 
     function IndexedFeatures(inds::NTuple{N}) where {N}
         for i in inds
@@ -75,7 +75,7 @@ function (c::IndexedFeatures)(A::AbstractMatrix)
 end
 
 # Index features on 4D arrays, e.g. Conv layers with batch dimension
-function (c::IndexedFeatures)(A::AbstractArray{T,4}) where {T}
+function (c::IndexedFeatures)(A::AbstractArray{T, 4}) where {T}
     w, h, _c, batchsize = size(A)
     return [[CartesianIndices((1:w, 1:h, i:i, b:b)) for b in 1:batchsize] for i in c.inds]
 end
@@ -139,20 +139,20 @@ function (c::TopNFeatures)(A::AbstractMatrix)
 end
 
 # Extract top features from 4D array: e.g. Conv layers with batch dimension
-function (c::TopNFeatures)(A::AbstractArray{T,4}) where {T}
+function (c::TopNFeatures)(A::AbstractArray{T, 4}) where {T}
     w, h, n_features, _batchsize = size(A)
     c.n > n_features && throw(TopNDimensionError(c.n, n_features))
 
-    features = sum(A; dims=(1, 2))[1, 1, :, :] # reduce width and height channels
+    features = sum(A; dims = (1, 2))[1, 1, :, :] # reduce width and height channels
     inds = top_n(features, c.n)
     return [
         [CartesianIndices((1:w, 1:h, i:i, b:b)) for (b, i) in enumerate(r)] for
-        r in eachrow(inds)
+            r in eachrow(inds)
     ]
 end
 
 function TopNDimensionError(n, nf)
-    DimensionMismatch(
+    return DimensionMismatch(
         "Attempted to find top $n features, but feature dimensionality is $nf"
     )
 end
@@ -178,5 +178,5 @@ julia> top_n(A, 2)
  4  1  3
 ```
 """
-top_n(A::AbstractMatrix, n) = mapslices(x -> top_n(x, n), A; dims=1)
-top_n(x::AbstractArray, n) = sortperm(x; rev=true)[1:n]
+top_n(A::AbstractMatrix, n) = mapslices(x -> top_n(x, n), A; dims = 1)
+top_n(x::AbstractArray, n) = sortperm(x; rev = true)[1:n]

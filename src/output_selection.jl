@@ -1,9 +1,5 @@
-const BATCHDIM_MISSING_OUTPUT = ArgumentError(
-    "The output is a 1D vector and therefore missing the required batch dimension."
-)
-
 const NOTE_OUTPUT_SELECTOR = "## Note
-XAIBase assumes that the batch dimension is the last dimension of the output.
+XAIBase assumes that the output of a model is a matrix of logits and that the batch dimension is the last dimension of the output.
 "
 
 """
@@ -15,6 +11,13 @@ of the selected outputs.
 $NOTE_OUTPUT_SELECTOR
 """
 abstract type AbstractOutputSelector end
+
+(::AbstractOutputSelector)(::AbstractVector) = throw(
+    ArgumentError(
+        "The output is a 1D vector and therefore missing the required batch dimension.
+        XAIBase assumes that the batch dimension is the last dimension of the output."
+    )
+)
 
 """
     MaxActivationSelector()
@@ -43,15 +46,13 @@ julia> output_selector(output)
 
 """
 struct MaxActivationSelector <: AbstractOutputSelector end
-function (::MaxActivationSelector)(out::AbstractArray{T,N}) where {T,N}
-    N < 2 && throw(BATCHDIM_MISSING_OUTPUT)
-    return vec(argmax(out; dims=1:(N - 1)))
-end
+(::MaxActivationSelector)(out::AbstractMatrix) = vec(argmax(out; dims = 1))
 
 """
     IndexSelector(index)
 
 Output selector that picks the output at the given index.
+If multiple indices are provided, outputs of a batch are selected separately.
 
 $NOTE_OUTPUT_SELECTOR
 
@@ -71,18 +72,24 @@ julia> output_selector(output)
   CartesianIndex(1, 1)
   CartesianIndex(1, 2)
   CartesianIndex(1, 3)
+
+julia> output_selector = IndexSelector((1, 1, 2));
+
+julia> output_selector(output)
+3-element Vector{CartesianIndex{2}}:
+ CartesianIndex(1, 1)
+ CartesianIndex(1, 2)
+ CartesianIndex(2, 3)
 ```
 """
-struct IndexSelector{I} <: AbstractOutputSelector
+struct IndexSelector{I <: Union{Integer, Tuple, AbstractArray{<:Integer}}} <: AbstractOutputSelector
     index::I
 end
-function (s::IndexSelector{<:Integer})(out::AbstractArray{T,N}) where {T,N}
-    N < 2 && throw(BATCHDIM_MISSING_OUTPUT)
-    batchsize = size(out, N)
-    return [CartesianIndex{N}(s.index, b) for b in 1:batchsize]
+function (s::IndexSelector{<:Integer})(out::AbstractMatrix)
+    batchsize = size(out, 2)
+    return [CartesianIndex{2}(s.index, b) for b in 1:batchsize]
 end
-function (s::IndexSelector{I})(out::AbstractArray{T,N}) where {I,T,N}
-    N < 2 && throw(BATCHDIM_MISSING_OUTPUT)
-    batchsize = size(out, N)
-    return [CartesianIndex{N}(s.index..., b) for b in 1:batchsize]
+function (s::IndexSelector{I})(out::AbstractMatrix) where {I <: Union{Tuple, AbstractArray{<:Integer}}}
+    length(s.index) != size(out, 2) && throw(DimensionMismatch("Mismatch in batch dimension of output tensor and indices of output selector."))
+    return [CartesianIndex{2}(i, b) for (b, i) in enumerate(s.index)]
 end

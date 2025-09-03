@@ -2,10 +2,10 @@ using Documenter
 using XAIBase
 
 makedocs(;
-    modules  = [XAIBase],
+    modules = [XAIBase],
     sitename = "XAIBase.jl",
-    authors  = "Adrian Hill",
-    format   = Documenter.HTML(; prettyurls=get(ENV, "CI", "false") == "true", assets=String[]),
+    authors = "Adrian Hill",
+    format = Documenter.HTML(; prettyurls = get(ENV, "CI", "false") == "true", assets = String[]),
     #! format: off
     pages = [
         "XAIBase Interface"       => "index.md",
@@ -14,8 +14,8 @@ makedocs(;
     ],
     #! format: on
     linkcheck = true,
-    warnonly  = [:missing_docs],
+    warnonly = [:missing_docs],
     checkdocs = :exports, # only check docstrings in API reference if they are exported
 )
 
-deploydocs(; repo="github.com/Julia-XAI/XAIBase.jl")
+deploydocs(; repo = "github.com/Julia-XAI/XAIBase.jl")
