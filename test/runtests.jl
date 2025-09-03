@@ -12,11 +12,9 @@ using ReferenceTests
             @info "...running Aqua.jl tests. These might print warnings from dependencies."
             Aqua.test_all(XAIBase; ambiguities = false)
         end
-        if VERSION > v"1.11" # JET v0.10 requires Julia v1.12
-            @testset "JET.jl" begin
-                @info "...running JET.jl type stability tests."
-                JET.test_package(XAIBase; target_defined_modules = true)
-            end
+        @testset "JET.jl" begin
+            @info "...running JET.jl type stability tests."
+            JET.test_package(XAIBase; target_defined_modules = true)
         end
     end
 
