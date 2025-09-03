@@ -104,10 +104,6 @@ expl = analyze(input, analyzer)
 heatmap(expl.val)
 ```
 
-```@example implementations
-heatmap(expl.val, colorscheme=:twilight, reduce=:norm, rangescale=:centered)
-```
-
 and make use of all the features provided by the Julia-XAI ecosystem.
 
 !!! note
