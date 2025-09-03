@@ -13,8 +13,11 @@ concurrency:
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 jobs:
   test:
-    name: Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ matrix.arch }} - ${{ github.event_name }}
-    runs-on: ${{ matrix.os }}
+    name: Julia ${{ matrix.version }}
+    runs-on: ubuntu-latest
+    permissions: # needed to allow julia-actions/cache to proactively delete old caches that it has created
+      actions: write
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -22,21 +25,15 @@ jobs:
           - 'lts'
           - '1'
           - 'pre'
-        os:
-          - ubuntu-latest
-        arch:
-          - x64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.version }}
-          arch: ${{ matrix.arch }}
+          arch: x64
       - uses: julia-actions/cache@v1
       - uses: julia-actions/julia-buildpkg@v1
-        continue-on-error: ${{ matrix.version == 'nightly' }}
       - uses: julia-actions/julia-runtest@v1
-        continue-on-error: ${{ matrix.version == 'nightly' }}
       - uses: julia-actions/julia-processcoverage@v1
       - uses: codecov/codecov-action@v5
         with:
@@ -46,21 +43,20 @@ jobs:
     name: Documentation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: julia-actions/setup-julia@v2
         with:
           version: '1'
-      - run: |
-          julia --project=docs -e '
-            using Pkg
-            Pkg.develop(PackageSpec(path=pwd()))
-            Pkg.instantiate()'
-      - run: |
-          julia --project=docs -e '
-            using Documenter: doctest
-            using XAIBase
-            doctest(XAIBase)'
-      - run: julia --project=docs docs/make.jl
+      - uses: julia-actions/cache@v2
+      - name: Configure doc environment
+        shell: julia --project=docs --color=yes {0}
+        run: |
+          using Pkg
+          Pkg.Registry.update()
+          Pkg.develop(PackageSpec(path=pwd()))
+          Pkg.instantiate()
+      - uses: julia-actions/julia-buildpkg@v1
+      - uses: julia-actions/julia-docdeploy@v1
         env:
           DATADEPS_ALWAYS_ACCEPT: true # for MLDatasets download
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

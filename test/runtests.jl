@@ -6,14 +6,14 @@ using JET
 using ReferenceTests
 
 @testset "XAIBase.jl" begin
-    if VERSION >= v"1.10"
+    @testset verbose = true "Linting" begin
         @info "Testing formalities..."
         @testset "Aqua.jl" begin
-            @info "- running Aqua.jl tests. These might print warnings from dependencies..."
+            @info "...running Aqua.jl tests. These might print warnings from dependencies."
             Aqua.test_all(XAIBase; ambiguities = false)
         end
         @testset "JET.jl" begin
-            @info "- running JET.jl type stability tests..."
+            @info "...running JET.jl type stability tests."
             JET.test_package(XAIBase; target_defined_modules = true)
         end
     end
