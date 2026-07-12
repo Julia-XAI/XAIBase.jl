@@ -30,4 +30,8 @@ using ReferenceTests
         @info "Testing feature selection..."
         include("test_feature_selection.jl")
     end
+    @testset "Pooling" begin
+        @info "Testing pooling..."
+        include("test_pooling.jl")
+    end
 end

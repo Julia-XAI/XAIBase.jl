@@ -23,6 +23,10 @@ include("exceptions.jl")
 # These are used to automatically select the maximally activated output.
 include("output_selection.jl")
 
+# Attribution pooling functions of type `AbstractPooling` that reduce explanations
+# over a feature dimension, e.g. to project them onto a human-interpretable space.
+include("pooling.jl")
+
 # Return type `Explanation` expected of `AbstractXAIMethod`s.
 include("explanation.jl")
 
@@ -39,4 +43,7 @@ export Explanation
 export analyze
 export AbstractOutputSelector, MaxActivationSelector, IndexSelector
 export AbstractFeatureSelector, IndexedFeatures, TopNFeatures
+export AbstractPooling, PositivePooling, SignedPooling
+export SumPool, MaxPool, L1Pool, NormPool, LInfPool, SquaredNormPool
+export pool
 end #module

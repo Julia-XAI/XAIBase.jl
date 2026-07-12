@@ -28,6 +28,20 @@ MaxActivationSelector
 IndexSelector
 ```
 
+## Attribution pooling
+```@docs
+pool
+AbstractPooling
+PositivePooling
+SignedPooling
+SumPool
+MaxPool
+L1Pool
+NormPool
+LInfPool
+SquaredNormPool
+```
+
 ## Index
 ```@index
 ```
