@@ -40,6 +40,7 @@ L1Pool
 NormPool
 LInfPool
 SquaredNormPool
+NoPooling
 ```
 
 ## Index

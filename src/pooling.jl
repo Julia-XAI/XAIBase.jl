@@ -51,6 +51,24 @@ function pool end
 (pooling::AbstractPooling)(A::AbstractArray, dim) = pool(pooling, A, dim)
 
 #===========================#
+# Identity pooling          #
+#===========================#
+
+"""
+    NoPooling()
+
+Identity pooling that returns the array unchanged, ignoring `dim`.
+
+Use `NoPooling` for explanations that are already reduced along the feature dimension
+and therefore require no pooling, such as Grad-CAM, whose output is internally aggregated
+to a single channel. `NoPooling` subtypes [`SignedPooling`](@ref): since it makes no
+guarantee about the sign of its output, it is conservatively visualized using a diverging
+colormap.
+"""
+struct NoPooling <: SignedPooling end
+pool(::NoPooling, A::AbstractArray, dim) = A
+
+#===========================#
 # Signed pooling functions  #
 #===========================#
 

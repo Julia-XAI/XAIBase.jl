@@ -18,6 +18,10 @@ using XAIBase: pool
         @test LInfPool() isa PositivePooling
         @test SquaredNormPool() isa PositivePooling
 
+        # NoPooling is an identity pooling; treated as signed since its sign is unknown
+        @test NoPooling() isa SignedPooling
+        @test !(NoPooling() isa PositivePooling)
+
         for p in (SumPool(), MaxPool(), L1Pool(), NormPool(), LInfPool(), SquaredNormPool())
             @test p isa AbstractPooling
             # Pooling keeps the reduced dimension as a singleton
@@ -25,6 +29,12 @@ using XAIBase: pool
             # Callable syntax is equivalent to `pool`
             @test p(A, 3) == pool(p, A, 3)
         end
+    end
+
+    @testset "NoPooling is the identity" begin
+        @test pool(NoPooling(), A, 3) === A       # returned unchanged, `dim` ignored
+        @test NoPooling()(A, 3) === A
+        @test pool(NoPooling(), A, 1) === A
     end
 
     @testset "Values" begin
@@ -51,11 +61,15 @@ using XAIBase: pool
     @testset "Explanation stores pooling" begin
         val = rand(2, 2, 3, 1)
         # Default pooling
-        expl = Explanation(val, val, val, 1, :Dummy, :attribution)
+        expl = Explanation(val, val, val, 1)
         @test expl.pooling isa NormPool
-        # Explicitly provided pooling
-        expl = Explanation(val, val, val, 1, :Dummy, :sensitivity; pooling = NormPool())
-        @test expl.pooling isa NormPool
+        # Pooling provided as a positional argument
+        expl = Explanation(val, val, val, 1, SumPool())
+        @test expl.pooling isa SumPool
         @test size(pool(expl.pooling, expl.val, 3)) == (2, 2, 1, 1)
+        # Positional pooling alongside keyword `extras`
+        expl = Explanation(val, val, val, 1, NoPooling(); extras = (; foo = 1))
+        @test expl.pooling isa NoPooling
+        @test expl.extras == (; foo = 1)
     end
 end

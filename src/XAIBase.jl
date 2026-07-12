@@ -44,6 +44,6 @@ export analyze
 export AbstractOutputSelector, MaxActivationSelector, IndexSelector
 export AbstractFeatureSelector, IndexedFeatures, TopNFeatures
 export AbstractPooling, PositivePooling, SignedPooling
-export SumPool, MaxPool, L1Pool, NormPool, LInfPool, SquaredNormPool
+export SumPool, MaxPool, L1Pool, NormPool, LInfPool, SquaredNormPool, NoPooling
 export pool
 end #module

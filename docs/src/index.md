@@ -49,9 +49,9 @@ function call_analyzer(input, method::MyMethod, output_selector::AbstractOutputS
     output = method.model(input)
     output_selection = output_selector(output)
 
-    val = ...         # your method's implementation
-    extras = nothing  # optionally add additional information using a named tuple
-    return Explanation(val, input, output, output_selection, :MyMethod, :attribution, extras)
+    val = ...              # your method's implementation
+    pooling = NormPool()   # how to reduce `val` over its feature dimension
+    return Explanation(val, input, output, output_selection, pooling)
 end
 ```
 

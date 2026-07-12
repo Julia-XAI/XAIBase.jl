@@ -14,7 +14,7 @@ function call_analyzer(
     batchsize = size(input)[end]
     v = reshape(output[output_selection], :, batchsize)
     val = input .* v
-    return Explanation(val, input, output, output_selection, :Dummy, :attribution)
+    return Explanation(val, input, output, output_selection)
 end
 
 analyzer = DummyAnalyzer()
@@ -52,7 +52,7 @@ function call_analyzer(
     output = 42
     output_selection = 42
     val = 42
-    return Explanation(val, input, output, output_selection, :AnyInput, :attribution)
+    return Explanation(val, input, output, output_selection)
 end
 
 analyzer = AnyInputAnalyzer()
