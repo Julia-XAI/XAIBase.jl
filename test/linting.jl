@@ -10,6 +10,7 @@ using ExplicitImports
 @testset "Aqua.jl" begin
     @info "Running Aqua.jl code-quality tests. These might print warnings from dependencies."
     Aqua.test_all(XAIBase; ambiguities = false)
+    Aqua.test_ambiguities(XAIBase)
 end
 
 @testset "ExplicitImports.jl" begin
