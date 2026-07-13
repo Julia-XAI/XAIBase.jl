@@ -1,21 +1,12 @@
 using XAIBase
 using Test
 
-using Aqua
-using JET
 using ReferenceTests
 
 @testset "XAIBase.jl" begin
     @testset verbose = true "Linting" begin
-        @info "Testing formalities..."
-        @testset "Aqua.jl" begin
-            @info "...running Aqua.jl tests. These might print warnings from dependencies."
-            Aqua.test_all(XAIBase; ambiguities = false)
-        end
-        @testset "JET.jl" begin
-            @info "...running JET.jl type stability tests."
-            JET.test_package(XAIBase; target_defined_modules = true)
-        end
+        @info "Running linting tests..."
+        include("linting.jl")
     end
 
     @testset "API" begin

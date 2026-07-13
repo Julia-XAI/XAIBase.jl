@@ -28,7 +28,7 @@ expl = analyze(input, analyzer)
 expl = analyzer(input)
 @test expl.val == val
 
-# Ouput selection
+# Output selection
 output_index = 2
 val = [2 30; 4 25; 6 20]
 
