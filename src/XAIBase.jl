@@ -27,6 +27,10 @@ include("output_selection.jl")
 # over a feature dimension, e.g. to project them onto a human-interpretable space.
 include("pooling.jl")
 
+# Normalization functions of type `AbstractNormalization` that rescale pooled
+# explanations onto the unit interval, e.g. before applying a colormap.
+include("normalization.jl")
+
 # Return type `Explanation` expected of `AbstractXAIMethod`s.
 include("explanation.jl")
 
@@ -48,4 +52,7 @@ export SumPooling, MaxPooling
 export SumAbsPooling, AbsSumPooling, MaxAbsPooling, NormPooling, SquaredNormPooling
 export SignedNoPooling, PositiveNoPooling
 export pool
+export AbstractNormalization, ExtremaNormalization, CenteredNormalization
+export normalization_bounds, default_normalization
+# `normalize` is deliberately not exported to avoid clashing with `LinearAlgebra.normalize`
 end #module

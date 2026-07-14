@@ -45,6 +45,18 @@ SignedNoPooling
 PositiveNoPooling
 ```
 
+## Normalization
+After pooling, explanations are normalized onto the unit interval `[0, 1]`
+before a colormap is applied:
+```@docs
+XAIBase.normalize
+AbstractNormalization
+ExtremaNormalization
+CenteredNormalization
+normalization_bounds
+default_normalization
+```
+
 ## Index
 ```@index
 ```
