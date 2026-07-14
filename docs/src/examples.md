@@ -31,8 +31,8 @@ that returns a random explanation in the shape of the input.
 using XAIBase
 import XAIBase: call_analyzer
 
-struct RandomAnalyzer{M} <: AbstractXAIMethod 
-    model::M    
+struct RandomAnalyzer{M} <: AbstractXAIMethod
+    model::M
 end
 
 function call_analyzer(input, method::RandomAnalyzer, output_selector::AbstractOutputSelector; kwargs...)
@@ -44,7 +44,7 @@ function call_analyzer(input, method::RandomAnalyzer, output_selector::AbstractO
 end
 ```
 
-We can directly use XAIBase's `analyze` function 
+We can directly use XAIBase's `analyze` function
 to compute the random explanation:
 
 ```@example implementations
@@ -75,8 +75,8 @@ import XAIBase: call_analyzer
 
 using Zygote: gradient
 
-struct MyGradient{M} <: AbstractXAIMethod 
-    model::M    
+struct MyGradient{M} <: AbstractXAIMethod
+    model::M
 end
 
 function call_analyzer(input, method::MyGradient, output_selector::AbstractOutputSelector; kwargs...)
@@ -91,13 +91,13 @@ end
 
 !!! note
     [ExplainableAI.jl](https://github.com/Julia-XAI/ExplainableAI.jl)
-    implements the `Gradient` analyzer in a more efficient way 
-    that works with batched inputs and only requires a single forward 
+    implements the `Gradient` analyzer in a more efficient way
+    that works with batched inputs and only requires a single forward
     and backward pass through the model.
 
 Once again, we can directly use XAIBase's `analyze` and VisionHeatmaps' `heatmap` functions
 ```@example implementations
-using VisionHeatmaps 
+using VisionHeatmaps
 
 analyzer = MyGradient(model)
 expl = analyze(input, analyzer)
@@ -107,5 +107,5 @@ heatmap(expl.val)
 and make use of all the features provided by the Julia-XAI ecosystem.
 
 !!! note
-    For an introduction to the [Julia-XAI ecosystem](https://github.com/Julia-XAI), 
+    For an introduction to the [Julia-XAI ecosystem](https://github.com/Julia-XAI),
     please refer to the [*Getting started* guide](https://julia-xai.github.io/XAIDocs/).

@@ -4,13 +4,13 @@
 [![Build Status](https://github.com/Julia-XAI/XAIBase.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/Julia-XAI/XAIBase.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/Julia-XAI/XAIBase.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/Julia-XAI/XAIBase.jl)
 [![Code Style: Runic](https://img.shields.io/badge/code_style-%E1%9A%B1%E1%9A%A2%E1%9A%BE%E1%9B%81%E1%9A%B2-black)](https://github.com/fredrikekre/Runic.jl)
-[![Aqua][aqua-img]][aqua-url] 
+[![Aqua][aqua-img]][aqua-url]
 [![JET][jet-img]][jet-url]
 [![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
 
 XAIBase is a light-weight dependency that defines the interface of XAI methods in the [Julia-XAI ecosystem](https://github.com/Julia-XAI),
-which focusses on post-hoc, local input space explanations of black-box models.
-In simpler terms, methods that try to answer the question 
+which focuses on post-hoc, local input space explanations of black-box models.
+In simpler terms, methods that try to answer the question
 *"Which part of the input is responsible for the model's output?"*
 
 Building on top of XAIBase (or providing an interface via [package extensions][docs-extensions])
@@ -24,7 +24,7 @@ It also allows you to use input-augmentations from [ExplainableAI.jl][url-explai
 XAIBase only requires you to fulfill the following two requirements:
 
 1. An XAI algorithm has to be a subtype of [`AbstractXAIMethod`][docs-abstractxaimethod]
-2. An XAI algorithm has to implement a `call_analyzer` method: 
+2. An XAI algorithm has to implement a `call_analyzer` method:
 
 ```julia
 import XAIBase: call_analyzer
@@ -34,10 +34,10 @@ call_analyzer(input, method::MyMethod, output_selector::AbstractOutputSelector; 
 
 * `call_analyzer` has to return an [`Explanation`][docs-explanation]
 * the input is expected to have a batch dimensions as its last dimension
-* when applied to a batch, the method returns a single [`Explanation`][docs-explanation], 
+* when applied to a batch, the method returns a single [`Explanation`][docs-explanation],
   which contains the batched output in the `val` field.
 * [`AbstractOutputSelector`][docs-abstractoutputselector]
-  are predefined callable structs that select scalar values from a model's output, 
+  are predefined callable structs that select scalar values from a model's output,
   e.g. the maximally activated output of a classifier using [`MaxActivationSelector`][docs-maxactivationselector].
 
 Refer to the [`Explanation`][docs-explanation] documentation for a description of the expected fields.
@@ -50,8 +50,8 @@ Julia-XAI methods will usually follow the following template:
 using XAIBase
 import XAIBase: call_analyzer
 
-struct MyMethod{M} <: AbstractXAIMethod 
-    model::M    
+struct MyMethod{M} <: AbstractXAIMethod
+    model::M
 end
 
 function call_analyzer(input, method::MyMethod, output_selector::AbstractOutputSelector; kwargs...)
@@ -65,11 +65,11 @@ end
 ```
 
 > [!TIP]
-> For full implementation examples, refer to the 
+> For full implementation examples, refer to the
 > [examples in the XAIBase documentation](https://julia-xai.github.io/XAIDocs/XAIBase/dev/examples/).
 
 ## Acknowledgements
-> Adrian Hill acknowledges support by the Federal Ministry of Education and Research (BMBF) 
+> Adrian Hill acknowledges support by the Federal Ministry of Education and Research (BMBF)
 > for the Berlin Institute for the Foundations of Learning and Data (BIFOLD) (01IS18037A).
 
 <!-- URLs -->

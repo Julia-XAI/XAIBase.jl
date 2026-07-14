@@ -12,8 +12,8 @@
 * ![Maintenance][badge-maintenance] Modularize tests ([#17])
 
 ## Version `v3.0.0`
-* ![BREAKING][badge-breaking] Remove heatmapping functionality. 
-  Users are now required to manually load either 
+* ![BREAKING][badge-breaking] Remove heatmapping functionality.
+  Users are now required to manually load either
   [VisionHeatmaps.jl](https://julia-xai.github.io/XAIDocs/VisionHeatmaps/stable/) or
   [TextHeatmaps.jl](https://julia-xai.github.io/XAIDocs/TextHeatmaps/stable/). ([#16])
 
