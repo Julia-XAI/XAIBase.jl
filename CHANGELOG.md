@@ -1,4 +1,12 @@
 # XAIBase.jl
+## Version `v5.0.0`
+* ![BREAKING][badge-breaking] Remove the `analyzer::Symbol` and `heatmap::Symbol` fields from `Explanation`
+* ![BREAKING][badge-breaking] Add a `pooling` field to `Explanation`, an optional positional argument defaulting to `NormPooling()`
+* ![Feature][badge-feature] Add attribution pooling functions, fieldless subtypes of `AbstractPooling`, applied via `pool(pooling, A, dim)` or the equivalent callable syntax `pooling(A, dim)`:
+  * signed (visualized with a diverging colormap): `SumPooling`, `MaxPooling`
+  * non-negative (visualized with a sequential colormap): `SumAbsPooling`, `AbsSumPooling`, `MaxAbsPooling`, `NormPooling`, `SquaredNormPooling`
+  * identity poolings that skip the reduction: `SignedNoPooling` (unknown sign) and `PositiveNoPooling` (asserts non-negative values, e.g. for Grad-CAM)
+
 ## Version `v4.1.0`
 * ![Feature][badge-feature] Refactor `IndexSelector` to support batches ([#22])
 * ![Maintenance][badge-maintenance] Format with Runic ([#22])

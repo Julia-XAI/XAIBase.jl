@@ -50,7 +50,7 @@ function call_analyzer(input, method::MyMethod, output_selector::AbstractOutputS
     output_selection = output_selector(output)
 
     val = ...              # your method's implementation
-    pooling = NormPool()   # how to reduce `val` over its feature dimension
+    pooling = NormPooling()   # how to reduce `val` over its feature dimension
     return Explanation(val, input, output, output_selection, pooling)
 end
 ```

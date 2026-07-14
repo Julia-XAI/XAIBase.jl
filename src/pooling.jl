@@ -21,7 +21,8 @@ abstract type AbstractPooling end
 
 """
 Abstract super type of attribution pooling functions with **non-negative** output,
-e.g. [`L1Pool`](@ref), [`NormPool`](@ref), [`LInfPool`](@ref) and [`SquaredNormPool`](@ref).
+e.g. [`SumAbsPooling`](@ref), [`AbsSumPooling`](@ref), [`MaxAbsPooling`](@ref),
+[`NormPooling`](@ref) and [`SquaredNormPooling`](@ref).
 
 Non-negative explanations are best visualized using a sequential colormap.
 """
@@ -29,7 +30,7 @@ abstract type PositivePooling <: AbstractPooling end
 
 """
 Abstract super type of attribution pooling functions with **signed** output,
-e.g. [`SumPool`](@ref) and [`MaxPool`](@ref).
+e.g. [`SumPooling`](@ref) and [`MaxPooling`](@ref).
 
 Signed explanations are best visualized using a diverging colormap.
 """
@@ -51,29 +52,47 @@ function pool end
 (pooling::AbstractPooling)(A::AbstractArray, dim) = pool(pooling, A, dim)
 
 #===========================#
-# Identity pooling          #
+# Identity poolings         #
 #===========================#
 
 """
-    NoPooling()
+    SignedNoPooling()
 
 Identity pooling that returns the array unchanged, ignoring `dim`.
 
-Use `NoPooling` for explanations that are already reduced along the feature dimension
-and therefore require no pooling, such as Grad-CAM, whose output is internally aggregated
-to a single channel. `NoPooling` subtypes [`SignedPooling`](@ref): since it makes no
-guarantee about the sign of its output, it is conservatively visualized using a diverging
-colormap.
+Use `SignedNoPooling` for explanations that are already reduced along the feature dimension
+and therefore require no pooling. `SignedNoPooling` subtypes [`SignedPooling`](@ref):
+it makes no guarantee about the sign of its output, so it is conservatively visualized
+using a diverging colormap.
+
+For explanations that are guaranteed to be non-negative, use [`PositiveNoPooling`](@ref).
 """
-struct NoPooling <: SignedPooling end
-pool(::NoPooling, A::AbstractArray, dim) = A
+struct SignedNoPooling <: SignedPooling end
+pool(::SignedNoPooling, A::AbstractArray, dim) = A
+
+"""
+    PositiveNoPooling()
+
+Identity pooling that returns the array unchanged, ignoring `dim`,
+asserting that its values are **non-negative**.
+
+Use `PositiveNoPooling` for explanations that are already reduced along the feature
+dimension *and* guaranteed to be non-negative, such as Grad-CAM, whose output is
+internally aggregated to a single channel and passed through a ReLU.
+`PositiveNoPooling` subtypes [`PositivePooling`](@ref) and is therefore visualized
+using a sequential colormap.
+
+For explanations of unknown sign, use [`SignedNoPooling`](@ref).
+"""
+struct PositiveNoPooling <: PositivePooling end
+pool(::PositiveNoPooling, A::AbstractArray, dim) = A
 
 #===========================#
 # Signed pooling functions  #
 #===========================#
 
 """
-    SumPool()
+    SumPooling()
 
 Sum-pooling `∑ aᵢ` over the feature dimension. Returns signed values.
 
@@ -82,36 +101,66 @@ but is prone to sign cancellation across features.
 
 $NOTE_POOLING
 """
-struct SumPool <: SignedPooling end
-pool(::SumPool, A::AbstractArray, dim) = sum(A; dims = dim)
+struct SumPooling <: SignedPooling end
+pool(::SumPooling, A::AbstractArray, dim) = sum(A; dims = dim)
 
 """
-    MaxPool()
+    MaxPooling()
 
 Max-pooling `max(aᵢ)` over the feature dimension. Returns signed values.
 
 $NOTE_POOLING
 """
-struct MaxPool <: SignedPooling end
-pool(::MaxPool, A::AbstractArray, dim) = maximum(A; dims = dim)
+struct MaxPooling <: SignedPooling end
+pool(::MaxPooling, A::AbstractArray, dim) = maximum(A; dims = dim)
 
 #=================================#
 # Non-negative pooling functions  #
 #=================================#
 
 """
-    L1Pool()
+    SumAbsPooling()
 
-``\\ell^1``-norm pooling `∑ |aᵢ|` over the feature dimension.
+Sum-of-absolute-values pooling `∑ |aᵢ|` (``\\ell^1``-norm) over the feature dimension.
 Returns non-negative values.
+
+Unlike [`AbsSumPooling`](@ref), taking absolute values *before* summing
+prevents sign cancellation across features.
 
 $NOTE_POOLING
 """
-struct L1Pool <: PositivePooling end
-pool(::L1Pool, A::AbstractArray, dim) = sum(abs, A; dims = dim)
+struct SumAbsPooling <: PositivePooling end
+pool(::SumAbsPooling, A::AbstractArray, dim) = sum(abs, A; dims = dim)
 
 """
-    NormPool()
+    AbsSumPooling()
+
+Absolute-value-of-sum pooling `|∑ aᵢ|` over the feature dimension.
+Returns non-negative values.
+
+Unlike [`SumAbsPooling`](@ref), summing *before* taking the absolute value
+allows sign cancellation across features: `AbsSumPooling` measures the magnitude
+of the net attribution, matching the conservation-oriented view of [`SumPooling`](@ref)
+while discarding its sign.
+
+$NOTE_POOLING
+"""
+struct AbsSumPooling <: PositivePooling end
+pool(::AbsSumPooling, A::AbstractArray, dim) = abs.(sum(A; dims = dim))
+
+"""
+    MaxAbsPooling()
+
+Maximum-absolute-value pooling `max(|aᵢ|)` (``\\ell^\\infty``-norm) over the feature
+dimension. Returns non-negative values.
+
+$NOTE_POOLING
+"""
+struct MaxAbsPooling <: PositivePooling end
+pool(::MaxAbsPooling, A::AbstractArray, dim) = maximum(abs, A; dims = dim)
+
+"""
+    NormPooling()
 
 ``\\ell^2``-norm pooling `√(∑ aᵢ²)` over the feature dimension.
 Returns non-negative values.
@@ -121,22 +170,11 @@ for gradient-based methods.
 
 $NOTE_POOLING
 """
-struct NormPool <: PositivePooling end
-pool(::NormPool, A::AbstractArray, dim) = sqrt.(sum(abs2, A; dims = dim))
+struct NormPooling <: PositivePooling end
+pool(::NormPooling, A::AbstractArray, dim) = sqrt.(sum(abs2, A; dims = dim))
 
 """
-    LInfPool()
-
-``\\ell^\\infty``-norm pooling `max(|aᵢ|)` over the feature dimension.
-Returns non-negative values.
-
-$NOTE_POOLING
-"""
-struct LInfPool <: PositivePooling end
-pool(::LInfPool, A::AbstractArray, dim) = maximum(abs, A; dims = dim)
-
-"""
-    SquaredNormPool()
+    SquaredNormPooling()
 
 Squared ``\\ell^2``-norm pooling `∑ aᵢ²` over the feature dimension.
 Returns non-negative values.
@@ -147,5 +185,5 @@ blurring the line between interpretability method and pooling function
 
 $NOTE_POOLING
 """
-struct SquaredNormPool <: PositivePooling end
-pool(::SquaredNormPool, A::AbstractArray, dim) = sum(abs2, A; dims = dim)
+struct SquaredNormPooling <: PositivePooling end
+pool(::SquaredNormPooling, A::AbstractArray, dim) = sum(abs2, A; dims = dim)

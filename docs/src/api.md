@@ -34,13 +34,15 @@ pool
 AbstractPooling
 PositivePooling
 SignedPooling
-SumPool
-MaxPool
-L1Pool
-NormPool
-LInfPool
-SquaredNormPool
-NoPooling
+SumPooling
+MaxPooling
+SumAbsPooling
+AbsSumPooling
+MaxAbsPooling
+NormPooling
+SquaredNormPooling
+SignedNoPooling
+PositiveNoPooling
 ```
 
 ## Index

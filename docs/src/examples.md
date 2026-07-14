@@ -40,7 +40,7 @@ function call_analyzer(input, method::RandomAnalyzer, output_selector::AbstractO
     output_selection = output_selector(output)
 
     val = rand(size(input)...)
-    return Explanation(val, input, output, output_selection, NormPool())
+    return Explanation(val, input, output, output_selection, NormPooling())
 end
 ```
 
@@ -85,7 +85,7 @@ function call_analyzer(input, method::MyGradient, output_selector::AbstractOutpu
 
     grad = gradient((x) -> only(method.model(x)[output_selection]), input)
     val = only(grad)
-    return Explanation(val, input, output, output_selection, NormPool())
+    return Explanation(val, input, output, output_selection, NormPooling())
 end
 ```
 

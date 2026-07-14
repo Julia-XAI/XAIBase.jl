@@ -12,11 +12,11 @@ Return type of analyzers when calling [`analyze`](@ref).
     dimension when projecting the explanation onto a human-interpretable space,
     e.g. for visualization. Downstream packages such as VisionHeatmaps.jl call it as
     `pooling(val, dim)`, choosing the reduced dimension `dim` themselves.
-    Defaults to [`NormPool`](@ref).
+    Defaults to [`NormPooling`](@ref).
 * `extras`: optional named tuple that can be used by analyzers
     to return additional information. Keyword argument, defaults to `nothing`.
 
-`pooling` is an optional positional argument, defaulting to [`NormPool`](@ref).
+`pooling` is an optional positional argument, defaulting to [`NormPooling`](@ref).
 """
 struct Explanation{V, I, O, S, P <: AbstractPooling, E <: Union{Nothing, NamedTuple}}
     val::V
@@ -28,7 +28,7 @@ struct Explanation{V, I, O, S, P <: AbstractPooling, E <: Union{Nothing, NamedTu
 end
 function Explanation(
         val, input, output, output_selection,
-        pooling::AbstractPooling = NormPool();
+        pooling::AbstractPooling = NormPooling();
         extras::Union{Nothing, NamedTuple} = nothing,
     )
     return Explanation(val, input, output, output_selection, pooling, extras)
