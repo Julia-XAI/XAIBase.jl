@@ -13,6 +13,10 @@ using ReferenceTests
         @info "Testing API..."
         include("test_api.jl")
     end
+    @testset "Interface" begin
+        @info "Testing interface..."
+        include("test_interface.jl")
+    end
     @testset "Output selection" begin
         @info "Testing output selection..."
         include("test_output_selection.jl")
