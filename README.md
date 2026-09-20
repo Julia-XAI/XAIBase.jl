@@ -8,7 +8,7 @@
 [![JET][jet-img]][jet-url]
 [![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
 
-XAIBase is a light-weight dependency that defines the interface of feature-attribution methods in the [Julia-XAI ecosystem](https://github.com/Julia-XAI),
+XAIBase is a light-weight dependency that defines the interface of XAI methods in the [Julia-XAI ecosystem](https://github.com/Julia-XAI),
 which focuses on post-hoc, local feature attributions on the input space of black-box models.
 In simpler terms, methods that try to answer the question
 *"Which part of the input is responsible for the model's output?"*
@@ -44,7 +44,7 @@ Refer to the [`Attribution`][docs-attribution] documentation for a description o
 For more information, take a look at the [documentation][docs].
 
 ## Example implementation
-Julia-XAI feature-attribution methods will usually follow the following template:
+Julia-XAI methods will usually follow the following template:
 
 ```julia
 using XAIBase
