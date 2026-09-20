@@ -20,7 +20,7 @@ using XAIBase: pool
         @test SquaredNormPooling() isa UnsignedPooling
 
         # Identity poolings: SignedNoPooling makes no guarantee about its sign,
-        # UnsignedNoPooling asserts non-negative values
+        # UnsignedNoPooling declares non-negative values
         @test SignedNoPooling() isa SignedPooling
         @test !(SignedNoPooling() isa UnsignedPooling)
         @test UnsignedNoPooling() isa UnsignedPooling
@@ -40,7 +40,7 @@ using XAIBase: pool
 
     @testset "Identity poolings" begin
         for p in (SignedNoPooling(), UnsignedNoPooling())
-            @test pool(p, A, 3) === A       # returned unchanged, `dim` ignored
+            @test pool(p, A, 3) === A       # returned unchanged, `dims` ignored
             @test p(A, 3) === A
             @test pool(p, A, 1) === A
         end

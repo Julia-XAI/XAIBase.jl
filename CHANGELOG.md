@@ -3,7 +3,7 @@
 * ![BREAKING][badge-breaking] Rename the `Explanation` struct to `Attribution`
 * ![BREAKING][badge-breaking] Remove the `analyzer::Symbol` and `heatmap::Symbol` fields from `Attribution`
 * ![BREAKING][badge-breaking] Add a `pooling` field to `Attribution`, an optional positional argument defaulting to `NormPooling()`
-* ![Feature][badge-feature] Add feature-attribution pooling functions, fieldless subtypes of `AbstractPooling`, applied via `pool(pooling, A, dim)` or the equivalent callable syntax `pooling(A, dim)`:
+* ![Feature][badge-feature] Add feature-attribution pooling functions, fieldless subtypes of `AbstractPooling`, applied via `pool(pooling, A, dims)` or the equivalent callable syntax `pooling(A, dims)`:
   * signed (visualized with a diverging colormap): `SumPooling`, `MaxPooling`
   * non-negative (visualized with a sequential colormap): `SumAbsPooling`, `AbsSumPooling`, `MaxAbsPooling`, `NormPooling`, `SquaredNormPooling`
   * identity poolings that skip the reduction: `SignedNoPooling` (unknown sign) and `UnsignedNoPooling` (asserts non-negative values, e.g. for Grad-CAM)

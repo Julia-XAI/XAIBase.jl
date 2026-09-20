@@ -11,7 +11,7 @@ Return type of feature-attribution methods when calling [`analyze`](@ref).
 * `pooling`: an [`AbstractPooling`](@ref) function that reduces `val` over its feature
     dimension when projecting the attribution onto a human-interpretable space,
     e.g. for visualization. Downstream packages such as VisionHeatmaps.jl call it as
-    `pooling(val, dim)`, choosing the reduced dimension `dim` themselves.
+    `pooling(val, dims)`, choosing the reduced dimension `dims` themselves.
     Defaults to [`NormPooling`](@ref).
 * `extras`: optional named tuple that can be used by analyzers
     to return additional information. Keyword argument, defaults to `nothing`.

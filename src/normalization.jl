@@ -11,10 +11,10 @@ and is therefore determined by the pooling function's supertype
 """
 Abstract super type of all normalization functions in XAIBase.
 
-Normalization functions are fieldless structs that linearly rescale arrays of pooled
-attribution values onto the unit interval `[0, 1]` via [`XAIBase.normalize`](@ref).
-The value range that is mapped onto `[0, 1]` is computed by
-[`normalization_bounds`](@ref).
+Normalization functions are fieldless structs
+that linearly rescale arrays of pooled attribution values
+onto the unit interval `[0, 1]` via [`XAIBase.normalize`](@ref).
+The value range that is mapped onto `[0, 1]` is computed by [`normalization_bounds`](@ref).
 
 $NOTE_NORMALIZATION
 """
@@ -26,10 +26,8 @@ abstract type AbstractNormalization end
 
 Rescale the values of array `A` linearly onto the unit interval `[0, 1]`
 using the normalization function `normalization`, an [`AbstractNormalization`](@ref).
-The value range `bounds = (lo, hi)` is mapped onto `[0, 1]`;
-values outside of it are clamped.
-If `bounds` is not provided, it is computed from `A` via
-[`normalization_bounds`](@ref normalization_bounds).
+The value range `bounds = (lo, hi)` is mapped onto `[0, 1]` and values outside of it are clamped.
+If `bounds` is not provided, it is computed from `A` via [`normalization_bounds`](@ref normalization_bounds).
 
 For convenience, `normalization(A)` is equivalent to `normalize(normalization, A)`.
 
@@ -48,8 +46,7 @@ slices = [normalize(normalization, x, bounds) for x in eachslice(batch; dims = 4
 !!! warning "Not exported"
     `normalize` is deliberately not exported to avoid name clashes,
     e.g. with `LinearAlgebra.normalize`.
-    Use the callable syntax `normalization(A)` or qualify the call as
-    `XAIBase.normalize`.
+    Use the callable syntax `normalization(A)` or qualify the call as `XAIBase.normalize`.
 
 $NOTE_NORMALIZATION
 """
@@ -71,8 +68,8 @@ end
 """
     normalization_bounds(normalization, A)
 
-Compute the value range `(lo, hi)` of `A` that [`XAIBase.normalize`](@ref)
-maps onto the unit interval `[0, 1]`.
+Compute the value range `(lo, hi)` of `A`
+that [`XAIBase.normalize`](@ref) maps onto the unit interval `[0, 1]`.
 
 `A` can be an array or any iterator of real values.
 This allows bounds to be computed across a whole batch of arrays,
@@ -92,8 +89,8 @@ function normalization_bounds end
 Normalization that linearly maps the value range `(minimum(A), maximum(A))`
 onto the unit interval `[0, 1]`.
 
-`ExtremaNormalization` is the natural normalization for **non-negative** attributions
-([`UnsignedPooling`](@ref)), which are visualized with a sequential colormap.
+`ExtremaNormalization` is a suitable normalization for unsigned attributions ([`UnsignedPooling`](@ref)),
+which are visualized with a sequential colormap.
 
 $NOTE_NORMALIZATION
 """
@@ -107,9 +104,8 @@ Normalization that linearly maps the symmetric value range
 `(-maximum(abs, A), maximum(abs, A))` onto the unit interval `[0, 1]`,
 mapping the value zero onto the midpoint `0.5`.
 
-`CenteredNormalization` is the natural normalization for **signed** attributions
-([`SignedPooling`](@ref)), which are visualized with a diverging colormap
-whose neutral midpoint then corresponds to zero attribution.
+`CenteredNormalization` is the natural normalization for signed attributions ([`SignedPooling`](@ref)),
+which are visualized with a diverging colormap whose neutral midpoint then corresponds to zero attribution.
 
 $NOTE_NORMALIZATION
 """
@@ -126,13 +122,11 @@ end
 """
     default_normalization(pooling)
 
-Return the natural [`AbstractNormalization`](@ref) for the given feature-attribution pooling
-function, determined by the sign of the pooling's output:
+Return the natural [`AbstractNormalization`](@ref) for the given feature-attribution pooling function,
+determined by the sign of the pooling's output:
 
 - [`UnsignedPooling`](@ref) → [`ExtremaNormalization`](@ref) (sequential colormap)
 - [`SignedPooling`](@ref) → [`CenteredNormalization`](@ref) (diverging colormap)
-
-$NOTE_NORMALIZATION
 """
 default_normalization(::UnsignedPooling) = ExtremaNormalization()
 default_normalization(::SignedPooling) = CenteredNormalization()
