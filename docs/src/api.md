@@ -31,7 +31,7 @@ IndexSelector
 ## Feature-attribution pooling
 
 XAIBase includes the following pooling functions:
-```
+```@docs
 NormPooling
 SumPooling
 MaxPooling
