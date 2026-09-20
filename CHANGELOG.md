@@ -1,13 +1,13 @@
 # XAIBase.jl
 ## Version `v5.0.0`
-* ![BREAKING][badge-breaking] Replace the `Explanation` result struct with `Attribution`:
+* ![BREAKING][badge-breaking] Replace the `Explanation` result struct with `Attribution` ([#25]):
   * remove the `analyzer::Symbol` and `heatmap::Symbol` fields
   * add a `pooling` field, an optional positional argument defaulting to `NormPooling()`
-* ![Feature][badge-feature] Add attribution pooling functions, fieldless subtypes of `AbstractPooling`, applied via `pool(pooling, A, dims)` or the equivalent callable syntax `pooling(A, dims)`:
+* ![Feature][badge-feature] Add attribution pooling functions, fieldless subtypes of `AbstractPooling`, applied via `pool(pooling, A, dims)` or the equivalent callable syntax `pooling(A, dims)` ([#25]):
   * `SignedPooling`, with signed output: `SumPooling`, `MaxPooling`
   * `UnsignedPooling`, with non-negative output: `SumAbsPooling`, `AbsSumPooling`, `MaxAbsPooling`, `NormPooling`, `SquaredNormPooling`
   * identity poolings that skip the reduction: `SignedNoPooling` (unknown sign) and `UnsignedNoPooling` (non-negative, e.g. for Grad-CAM)
-* ![Feature][badge-feature] Add normalization functions, fieldless subtypes of `AbstractNormalization`, that linearly rescale pooled attributions onto the unit interval `[0, 1]`:
+* ![Feature][badge-feature] Add normalization functions, fieldless subtypes of `AbstractNormalization`, that linearly rescale pooled attributions onto the unit interval `[0, 1]` ([#25]):
   * these are applied via `XAIBase.normalize(normalization, A[, bounds])` (unexported to avoid clashes with LinearAlgebra)
     or the equivalent callable syntax `normalization(A)`
   * `ExtremaNormalization` maps `(minimum(A), maximum(A))` onto `[0, 1]`
@@ -69,6 +69,7 @@ This release makes VisionHeatmaps.jl and TextHeatmaps.jl strong dependencies of 
 ![Documentation][badge-docs]
 -->
 
+[#25]: https://github.com/Julia-XAI/XAIBase.jl/pull/25
 [#22]: https://github.com/Julia-XAI/XAIBase.jl/pull/22
 [#20]: https://github.com/Julia-XAI/XAIBase.jl/pull/20
 [#17]: https://github.com/Julia-XAI/XAIBase.jl/pull/17
