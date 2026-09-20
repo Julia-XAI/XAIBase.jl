@@ -43,6 +43,9 @@ include("analyze.jl")
 # Utilities for XAI methods that compute Attributions w.r.t. specific features:
 include("feature_selection.jl")
 
+# Developer-facing interface test that checks a method against the XAIBase contract.
+include("test_interface.jl")
+
 export AbstractXAIMethod
 export Attribution
 export analyze

@@ -67,6 +67,12 @@ normalization_bounds
 default_normalization
 ```
 
+## Testing the interface
+Method packages can check that an analyzer conforms to the XAIBase interface:
+```@docs
+XAIBase.test_interface
+```
+
 ## Index
 ```@index
 ```
