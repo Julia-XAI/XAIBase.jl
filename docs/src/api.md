@@ -3,15 +3,16 @@
 AbstractXAIMethod
 ```
 
-## Computing explanations
-Most methods in the Julia-XAI ecosystem work by calling `analyze` on an input and an analyzer:
+## Computing feature attributions
+Most feature-attribution methods in the Julia-XAI ecosystem work by calling `analyze`
+on an input and an analyzer:
 ```@docs
 analyze
 ```
 
-The return type of `analyze` is an `Explanation`:
+The return type of `analyze` is an `Attribution`:
 ```@docs
-Explanation
+Attribution
 ```
 
 ## Feature selection
@@ -28,11 +29,11 @@ MaxActivationSelector
 IndexSelector
 ```
 
-## Attribution pooling
+## Feature-attribution pooling
 ```@docs
 pool
 AbstractPooling
-PositivePooling
+UnsignedPooling
 SignedPooling
 SumPooling
 MaxPooling
@@ -42,11 +43,11 @@ MaxAbsPooling
 NormPooling
 SquaredNormPooling
 SignedNoPooling
-PositiveNoPooling
+UnsignedNoPooling
 ```
 
 ## Normalization
-After pooling, explanations are normalized onto the unit interval `[0, 1]`
+After pooling, attributions are normalized onto the unit interval `[0, 1]`
 before a colormap is applied:
 ```@docs
 XAIBase.normalize

@@ -75,7 +75,7 @@ using XAIBase: normalize, normalization_bounds
         @test default_normalization(MaxAbsPooling()) isa ExtremaNormalization
         @test default_normalization(NormPooling()) isa ExtremaNormalization
         @test default_normalization(SquaredNormPooling()) isa ExtremaNormalization
-        @test default_normalization(PositiveNoPooling()) isa ExtremaNormalization
+        @test default_normalization(UnsignedNoPooling()) isa ExtremaNormalization
 
         # Signed poolings → diverging colormap → centered normalization
         @test default_normalization(SumPooling()) isa CenteredNormalization
@@ -87,12 +87,12 @@ using XAIBase: normalize, normalization_bounds
         # The full pool → normalize chain on a WHCN attribution with two pixels:
         # channel values [3, -4] and [1, 1] sum-pool to -1 and 2 respectively
         val = reshape([3.0, 1.0, -4.0, 1.0], 2, 1, 2, 1)
-        expl = Explanation(val, val, val, 1, SumPooling())
+        attr = Attribution(val, val, val, 1, SumPooling())
 
-        pooled = expl.pooling(expl.val, 3)
+        pooled = attr.pooling(attr.val, 3)
         @test pooled == reshape([-1.0, 2.0], 2, 1, 1, 1)
 
-        n = default_normalization(expl.pooling)
+        n = default_normalization(attr.pooling)
         @test n isa CenteredNormalization
         # Maximum absolute value 2 maps (-2, 2) onto (0, 1)
         @test normalize(n, pooled) == reshape([0.25, 1.0], 2, 1, 1, 1)

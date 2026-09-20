@@ -1,7 +1,7 @@
 ## [Interface description](@id docs-interface)
 
-XAIBase.jl is a light-weight dependency that defines the interface of XAI methods
-in the [Julia-XAI ecosystem](https://julia-xai.github.io/XAIDocs/).
+XAIBase.jl is a light-weight dependency that defines the interface of feature-attribution
+methods in the [Julia-XAI ecosystem](https://julia-xai.github.io/XAIDocs/).
 
 Building on top of XAIBase
 (or providing an interface via [package extensions](https://pkgdocs.julialang.org/v1/creating-packages/#Conditional-loading-of-code-in-packages-(Extensions)))
@@ -12,8 +12,8 @@ and [TextHeatmaps.jl](https://julia-xai.github.io/XAIDocs/TextHeatmaps/stable/).
 
 This only requires you to fulfill the following two requirements:
 
-1. An XAI method has to be a subtype of `AbstractXAIMethod`
-2. An XAI algorithm has to implement a `call_analyzer` method:
+1. A feature-attribution method has to be a subtype of `AbstractXAIMethod`
+2. A feature-attribution method has to implement a `call_analyzer` method:
 
 ```julia
 import XAIBase: call_analyzer
@@ -21,21 +21,21 @@ import XAIBase: call_analyzer
 call_analyzer(input, method::MyMethod, output_selector::AbstractOutputSelector; kwargs...)
 ```
 
-* `call_analyzer` has to return an [`Explanation`](@ref)
+* `call_analyzer` has to return an [`Attribution`](@ref)
 * The input is expected to have a batch dimensions as its last dimension
 * The output is expected to be a matrix (of e.g. logits) with a batch dimensions as its last dimension
-* When applied to a batch, the method returns a single [`Explanation`](@ref),
+* When applied to a batch, the method returns a single [`Attribution`](@ref),
   which contains the batched output in the `val` field.
 * `AbstractOutputSelector`s are predefined callable structs
   that select scalar values from a model's output,
   e.g. the maximally activated outputs of a classifier using [`MaxActivationSelector`](@ref)
   or a specific output indices using [`IndexSelector`](@ref).
 
-Refer to the [`Explanation`](@ref) documentation for a description of the expected fields.
+Refer to the [`Attribution`](@ref) documentation for a description of the expected fields.
 For more information, take a look at [`src/XAIBase.jl`](https://github.com/Julia-XAI/XAIBase.jl/blob/main/src/XAIBase.jl).
 
 ## Implementation template
-Julia-XAI methods will usually follow the following template:
+Julia-XAI feature-attribution methods will usually follow the following template:
 
 ```julia
 using XAIBase
@@ -51,7 +51,7 @@ function call_analyzer(input, method::MyMethod, output_selector::AbstractOutputS
 
     val = ...              # your method's implementation
     pooling = NormPooling()   # how to reduce `val` over its feature dimension
-    return Explanation(val, input, output, output_selection, pooling)
+    return Attribution(val, input, output, output_selection, pooling)
 end
 ```
 

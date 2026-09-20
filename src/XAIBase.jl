@@ -6,7 +6,7 @@ include("utils.jl")
 """
 Abstract super type of all XAI methods.
 
-It is expected that all XAI methods are callable types that return an `Explanation`:
+It is expected that all XAI methods are callable types that return an `Attribution`:
 
 ```julia
 (method::AbstractXAIMethod)(input, output_selector::AbstractOutputSelector)
@@ -19,38 +19,39 @@ abstract type AbstractXAIMethod end
 
 include("exceptions.jl")
 
-# Output selectors of type `AbstractOutputSelector` for class-specific explanations.
+# Output selectors of type `AbstractOutputSelector` for class-specific attributions.
 # These are used to automatically select the maximally activated output.
 include("output_selection.jl")
 
-# Attribution pooling functions of type `AbstractPooling` that reduce explanations
-# over a feature dimension, e.g. to project them onto a human-interpretable space.
+# Feature-attribution pooling functions of type `AbstractPooling` that reduce
+# attributions over a feature dimension,
+# e.g. to project them onto a human-interpretable space.
 include("pooling.jl")
 
 # Normalization functions of type `AbstractNormalization` that rescale pooled
-# explanations onto the unit interval, e.g. before applying a colormap.
+# attributions onto the unit interval, e.g. before applying a colormap.
 include("normalization.jl")
 
-# Return type `Explanation` expected of `AbstractXAIMethod`s.
-include("explanation.jl")
+# Return type `Attribution` expected of `AbstractXAIMethod`s.
+include("attribution.jl")
 
 # User-facing API of XAI methods.
 # This file defines the `analyze` function at the core of Julia-XAI methods,
 # which in turn calls `(method)(input, output_selector)`.
 include("analyze.jl")
 
-# Utilities for XAI methods that compute Explanations w.r.t. specific features:
+# Utilities for XAI methods that compute Attributions w.r.t. specific features:
 include("feature_selection.jl")
 
 export AbstractXAIMethod
-export Explanation
+export Attribution
 export analyze
 export AbstractOutputSelector, MaxActivationSelector, IndexSelector
 export AbstractFeatureSelector, IndexedFeatures, TopNFeatures
-export AbstractPooling, PositivePooling, SignedPooling
+export AbstractPooling, UnsignedPooling, SignedPooling
 export SumPooling, MaxPooling
 export SumAbsPooling, AbsSumPooling, MaxAbsPooling, NormPooling, SquaredNormPooling
-export SignedNoPooling, PositiveNoPooling
+export SignedNoPooling, UnsignedNoPooling
 export pool
 export AbstractNormalization, ExtremaNormalization, CenteredNormalization
 export normalization_bounds, default_normalization

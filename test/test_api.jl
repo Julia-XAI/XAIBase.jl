@@ -14,7 +14,7 @@ function call_analyzer(
     batchsize = size(input)[end]
     v = reshape(output[output_selection], :, batchsize)
     val = input .* v
-    return Explanation(val, input, output, output_selection)
+    return Attribution(val, input, output, output_selection)
 end
 
 analyzer = DummyAnalyzer()
@@ -23,20 +23,20 @@ input = [1 6; 2 5; 3 4]
 # Max activation
 val = [3 36; 6 30; 9 24]
 
-expl = analyze(input, analyzer)
-@test expl.val == val
-expl = analyzer(input)
-@test expl.val == val
+attr = analyze(input, analyzer)
+@test attr.val == val
+attr = analyzer(input)
+@test attr.val == val
 
 # Output selection
 output_index = 2
 val = [2 30; 4 25; 6 20]
 
-expl = analyze(input, analyzer, output_index)
-@test expl.val == val
-@test isnothing(expl.extras)
-expl = analyzer(input, output_index)
-@test expl.val == val
+attr = analyze(input, analyzer, output_index)
+@test attr.val == val
+@test isnothing(attr.extras)
+attr = analyzer(input, output_index)
+@test attr.val == val
 
 # Dummy analyzer to test exceptions
 struct EmptyAnalyzer <: AbstractXAIMethod end
@@ -52,7 +52,7 @@ function call_analyzer(
     output = 42
     output_selection = 42
     val = 42
-    return Explanation(val, input, output, output_selection)
+    return Attribution(val, input, output, output_selection)
 end
 
 analyzer = AnyInputAnalyzer()

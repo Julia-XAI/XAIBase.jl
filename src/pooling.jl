@@ -1,5 +1,5 @@
 const NOTE_POOLING = """## Note
-Attribution pooling projects a high-dimensional explanation (e.g. RGB values per pixel)
+Attribution pooling projects a high-dimensional attribution (e.g. RGB values per pixel)
 onto a lower-dimensional, human-interpretable space (e.g. a single value per pixel)
 by reducing over a feature dimension `dim` (typically the color-channel dimension `3`
 of a `(width, height, channels, batch)` array).
@@ -9,10 +9,10 @@ is reduced to size `(W, H, 1, N)`.
 """
 
 """
-Abstract super type of all attribution pooling functions in XAIBase.
+Abstract super type of all feature-attribution pooling functions in XAIBase.
 
 Pooling functions are fieldless structs that reduce an array over a feature dimension
-via [`pool`](@ref). They are subtypes of either [`PositivePooling`](@ref) or
+via [`pool`](@ref). They are subtypes of either [`UnsignedPooling`](@ref) or
 [`SignedPooling`](@ref), depending on whether their output is non-negative or signed.
 
 $NOTE_POOLING
@@ -20,26 +20,26 @@ $NOTE_POOLING
 abstract type AbstractPooling end
 
 """
-Abstract super type of attribution pooling functions with **non-negative** output,
+Abstract super type of feature-attribution pooling functions with **non-negative** output,
 e.g. [`SumAbsPooling`](@ref), [`AbsSumPooling`](@ref), [`MaxAbsPooling`](@ref),
 [`NormPooling`](@ref) and [`SquaredNormPooling`](@ref).
 
-Non-negative explanations are best visualized using a sequential colormap.
+Non-negative attributions are best visualized using a sequential colormap.
 """
-abstract type PositivePooling <: AbstractPooling end
+abstract type UnsignedPooling <: AbstractPooling end
 
 """
-Abstract super type of attribution pooling functions with **signed** output,
+Abstract super type of feature-attribution pooling functions with **signed** output,
 e.g. [`SumPooling`](@ref) and [`MaxPooling`](@ref).
 
-Signed explanations are best visualized using a diverging colormap.
+Signed attributions are best visualized using a diverging colormap.
 """
 abstract type SignedPooling <: AbstractPooling end
 
 """
     pool(pooling, A, dim)
 
-Reduce array `A` over the feature dimension `dim` using the attribution pooling
+Reduce array `A` over the feature dimension `dim` using the feature-attribution pooling
 function `pooling`, an [`AbstractPooling`](@ref).
 
 For convenience, `pooling(A, dim)` is equivalent to `pool(pooling, A, dim)`.
@@ -60,32 +60,32 @@ function pool end
 
 Identity pooling that returns the array unchanged, ignoring `dim`.
 
-Use `SignedNoPooling` for explanations that are already reduced along the feature dimension
+Use `SignedNoPooling` for attributions that are already reduced along the feature dimension
 and therefore require no pooling. `SignedNoPooling` subtypes [`SignedPooling`](@ref):
 it makes no guarantee about the sign of its output, so it is conservatively visualized
 using a diverging colormap.
 
-For explanations that are guaranteed to be non-negative, use [`PositiveNoPooling`](@ref).
+For attributions that are guaranteed to be non-negative, use [`UnsignedNoPooling`](@ref).
 """
 struct SignedNoPooling <: SignedPooling end
 pool(::SignedNoPooling, A::AbstractArray, dim) = A
 
 """
-    PositiveNoPooling()
+    UnsignedNoPooling()
 
 Identity pooling that returns the array unchanged, ignoring `dim`,
 asserting that its values are **non-negative**.
 
-Use `PositiveNoPooling` for explanations that are already reduced along the feature
+Use `UnsignedNoPooling` for attributions that are already reduced along the feature
 dimension *and* guaranteed to be non-negative, such as Grad-CAM, whose output is
 internally aggregated to a single channel and passed through a ReLU.
-`PositiveNoPooling` subtypes [`PositivePooling`](@ref) and is therefore visualized
+`UnsignedNoPooling` subtypes [`UnsignedPooling`](@ref) and is therefore visualized
 using a sequential colormap.
 
-For explanations of unknown sign, use [`SignedNoPooling`](@ref).
+For attributions of unknown sign, use [`SignedNoPooling`](@ref).
 """
-struct PositiveNoPooling <: PositivePooling end
-pool(::PositiveNoPooling, A::AbstractArray, dim) = A
+struct UnsignedNoPooling <: UnsignedPooling end
+pool(::UnsignedNoPooling, A::AbstractArray, dim) = A
 
 #===========================#
 # Signed pooling functions  #
@@ -129,7 +129,7 @@ prevents sign cancellation across features.
 
 $NOTE_POOLING
 """
-struct SumAbsPooling <: PositivePooling end
+struct SumAbsPooling <: UnsignedPooling end
 pool(::SumAbsPooling, A::AbstractArray, dim) = sum(abs, A; dims = dim)
 
 """
@@ -145,7 +145,7 @@ while discarding its sign.
 
 $NOTE_POOLING
 """
-struct AbsSumPooling <: PositivePooling end
+struct AbsSumPooling <: UnsignedPooling end
 pool(::AbsSumPooling, A::AbstractArray, dim) = abs.(sum(A; dims = dim))
 
 """
@@ -156,7 +156,7 @@ dimension. Returns non-negative values.
 
 $NOTE_POOLING
 """
-struct MaxAbsPooling <: PositivePooling end
+struct MaxAbsPooling <: UnsignedPooling end
 pool(::MaxAbsPooling, A::AbstractArray, dim) = maximum(abs, A; dims = dim)
 
 """
@@ -170,7 +170,7 @@ for gradient-based methods.
 
 $NOTE_POOLING
 """
-struct NormPooling <: PositivePooling end
+struct NormPooling <: UnsignedPooling end
 pool(::NormPooling, A::AbstractArray, dim) = sqrt.(sum(abs2, A; dims = dim))
 
 """
@@ -185,5 +185,5 @@ blurring the line between interpretability method and pooling function
 
 $NOTE_POOLING
 """
-struct SquaredNormPooling <: PositivePooling end
+struct SquaredNormPooling <: UnsignedPooling end
 pool(::SquaredNormPooling, A::AbstractArray, dim) = sum(abs2, A; dims = dim)

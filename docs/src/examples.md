@@ -1,5 +1,5 @@
 # [Example Implementations](@id examples)
-The following examples demonstrate the implementation of XAI methods using the XAIBase.jl interface.
+The following examples demonstrate the implementation of feature-attribution methods using the XAIBase.jl interface.
 To evaluate our methods, we load a small, pre-trained LeNet5 model and the MNIST dataset:
 
 ```@example implementations
@@ -23,9 +23,9 @@ input = reshape(x, 28, 28, 1, :);
 convert2image(MNIST, x)
 ```
 
-## Example 1: Random explanation
+## Example 1: Random attribution
 To get started, we implement a nonsensical method
-that returns a random explanation in the shape of the input.
+that returns a random attribution in the shape of the input.
 
 ```@example implementations
 using XAIBase
@@ -40,30 +40,30 @@ function call_analyzer(input, method::RandomAnalyzer, output_selector::AbstractO
     output_selection = output_selector(output)
 
     val = rand(size(input)...)
-    return Explanation(val, input, output, output_selection, NormPooling())
+    return Attribution(val, input, output, output_selection, NormPooling())
 end
 ```
 
 We can directly use XAIBase's `analyze` function
-to compute the random explanation:
+to compute the random attribution:
 
 ```@example implementations
 analyzer = RandomAnalyzer(model)
-expl = analyze(input, analyzer)
+attr = analyze(input, analyzer)
 ```
 
 Using either [VisionHeatmaps.jl](https://julia-xai.github.io/XAIDocs/VisionHeatmaps/stable/)
 or [TextHeatmaps.jl](https://julia-xai.github.io/XAIDocs/TextHeatmaps/stable/),
-which provide package extensions on XAIBase's `Explanation` type,
-we can visualize the explanations:
+which provide package extensions on XAIBase's `Attribution` type,
+we can visualize the attributions:
 
 ```@example implementations
 using VisionHeatmaps # load heatmapping functionality
 
-heatmap(expl.val)
+heatmap(attr.val)
 ```
 
-As expected, the explanation is just noise.
+As expected, the attribution is just noise.
 
 ## Example 2: Input sensitivity
 In this second example, we naively reimplement the `Gradient` analyzer from
@@ -85,7 +85,7 @@ function call_analyzer(input, method::MyGradient, output_selector::AbstractOutpu
 
     grad = gradient((x) -> only(method.model(x)[output_selection]), input)
     val = only(grad)
-    return Explanation(val, input, output, output_selection, NormPooling())
+    return Attribution(val, input, output, output_selection, NormPooling())
 end
 ```
 
@@ -100,8 +100,8 @@ Once again, we can directly use XAIBase's `analyze` and VisionHeatmaps' `heatmap
 using VisionHeatmaps
 
 analyzer = MyGradient(model)
-expl = analyze(input, analyzer)
-heatmap(expl.val)
+attr = analyze(input, analyzer)
+heatmap(attr.val)
 ```
 
 and make use of all the features provided by the Julia-XAI ecosystem.

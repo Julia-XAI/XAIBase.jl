@@ -1,5 +1,5 @@
 const NOTE_NORMALIZATION = """## Note
-Normalization is the step between attribution pooling and colormapping:
+Normalization is the step between feature-attribution pooling and colormapping:
 it linearly rescales pooled attribution values onto the unit interval `[0, 1]`,
 which colormaps expect as input.
 
@@ -92,8 +92,8 @@ function normalization_bounds end
 Normalization that linearly maps the value range `(minimum(A), maximum(A))`
 onto the unit interval `[0, 1]`.
 
-`ExtremaNormalization` is the natural normalization for **non-negative** explanations
-([`PositivePooling`](@ref)), which are visualized with a sequential colormap.
+`ExtremaNormalization` is the natural normalization for **non-negative** attributions
+([`UnsignedPooling`](@ref)), which are visualized with a sequential colormap.
 
 $NOTE_NORMALIZATION
 """
@@ -107,7 +107,7 @@ Normalization that linearly maps the symmetric value range
 `(-maximum(abs, A), maximum(abs, A))` onto the unit interval `[0, 1]`,
 mapping the value zero onto the midpoint `0.5`.
 
-`CenteredNormalization` is the natural normalization for **signed** explanations
+`CenteredNormalization` is the natural normalization for **signed** attributions
 ([`SignedPooling`](@ref)), which are visualized with a diverging colormap
 whose neutral midpoint then corresponds to zero attribution.
 
@@ -119,20 +119,20 @@ function normalization_bounds(::CenteredNormalization, A)
     return (-hi, hi)
 end
 
-#================================#
-# Coupling to attribution pooling #
-#================================#
+#==========================================#
+# Coupling to feature-attribution pooling  #
+#==========================================#
 
 """
     default_normalization(pooling)
 
-Return the natural [`AbstractNormalization`](@ref) for the given attribution pooling
+Return the natural [`AbstractNormalization`](@ref) for the given feature-attribution pooling
 function, determined by the sign of the pooling's output:
 
-- [`PositivePooling`](@ref) → [`ExtremaNormalization`](@ref) (sequential colormap)
+- [`UnsignedPooling`](@ref) → [`ExtremaNormalization`](@ref) (sequential colormap)
 - [`SignedPooling`](@ref) → [`CenteredNormalization`](@ref) (diverging colormap)
 
 $NOTE_NORMALIZATION
 """
-default_normalization(::PositivePooling) = ExtremaNormalization()
+default_normalization(::UnsignedPooling) = ExtremaNormalization()
 default_normalization(::SignedPooling) = CenteredNormalization()

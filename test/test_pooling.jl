@@ -13,18 +13,18 @@ using XAIBase: pool
     @testset "API" begin
         @test SumPooling() isa SignedPooling
         @test MaxPooling() isa SignedPooling
-        @test SumAbsPooling() isa PositivePooling
-        @test AbsSumPooling() isa PositivePooling
-        @test MaxAbsPooling() isa PositivePooling
-        @test NormPooling() isa PositivePooling
-        @test SquaredNormPooling() isa PositivePooling
+        @test SumAbsPooling() isa UnsignedPooling
+        @test AbsSumPooling() isa UnsignedPooling
+        @test MaxAbsPooling() isa UnsignedPooling
+        @test NormPooling() isa UnsignedPooling
+        @test SquaredNormPooling() isa UnsignedPooling
 
         # Identity poolings: SignedNoPooling makes no guarantee about its sign,
-        # PositiveNoPooling asserts non-negative values
+        # UnsignedNoPooling asserts non-negative values
         @test SignedNoPooling() isa SignedPooling
-        @test !(SignedNoPooling() isa PositivePooling)
-        @test PositiveNoPooling() isa PositivePooling
-        @test !(PositiveNoPooling() isa SignedPooling)
+        @test !(SignedNoPooling() isa UnsignedPooling)
+        @test UnsignedNoPooling() isa UnsignedPooling
+        @test !(UnsignedNoPooling() isa SignedPooling)
 
         for p in (
                 SumPooling(), MaxPooling(), SumAbsPooling(), AbsSumPooling(),
@@ -39,7 +39,7 @@ using XAIBase: pool
     end
 
     @testset "Identity poolings" begin
-        for p in (SignedNoPooling(), PositiveNoPooling())
+        for p in (SignedNoPooling(), UnsignedNoPooling())
             @test pool(p, A, 3) === A       # returned unchanged, `dim` ignored
             @test p(A, 3) === A
             @test pool(p, A, 1) === A
@@ -69,18 +69,18 @@ using XAIBase: pool
         @test pool(NormPooling(), B, 1) ≈ sqrt.(sum(abs2, B; dims = 1))
     end
 
-    @testset "Explanation stores pooling" begin
+    @testset "Attribution stores pooling" begin
         val = rand(2, 2, 3, 1)
         # Default pooling
-        expl = Explanation(val, val, val, 1)
-        @test expl.pooling isa NormPooling
+        attr = Attribution(val, val, val, 1)
+        @test attr.pooling isa NormPooling
         # Pooling provided as a positional argument
-        expl = Explanation(val, val, val, 1, SumPooling())
-        @test expl.pooling isa SumPooling
-        @test size(pool(expl.pooling, expl.val, 3)) == (2, 2, 1, 1)
+        attr = Attribution(val, val, val, 1, SumPooling())
+        @test attr.pooling isa SumPooling
+        @test size(pool(attr.pooling, attr.val, 3)) == (2, 2, 1, 1)
         # Positional pooling alongside keyword `extras`
-        expl = Explanation(val, val, val, 1, SignedNoPooling(); extras = (; foo = 1))
-        @test expl.pooling isa SignedNoPooling
-        @test expl.extras == (; foo = 1)
+        attr = Attribution(val, val, val, 1, SignedNoPooling(); extras = (; foo = 1))
+        @test attr.pooling isa SignedNoPooling
+        @test attr.extras == (; foo = 1)
     end
 end

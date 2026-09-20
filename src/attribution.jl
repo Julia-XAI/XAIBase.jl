@@ -1,15 +1,15 @@
 """
-    Explanation(val, input, output, output_selection, pooling; extras)
+    Attribution(val, input, output, output_selection, pooling; extras)
 
-Return type of analyzers when calling [`analyze`](@ref).
+Return type of feature-attribution methods when calling [`analyze`](@ref).
 
 ## Fields
 * `val`: numerical output of the analyzer, e.g. an attribution or gradient
 * `input`: input for the given analyzer
 * `output`: model output for the given analyzer input
-* `output_selection`: index of the output used for the explanation
+* `output_selection`: index of the output the attribution was computed for
 * `pooling`: an [`AbstractPooling`](@ref) function that reduces `val` over its feature
-    dimension when projecting the explanation onto a human-interpretable space,
+    dimension when projecting the attribution onto a human-interpretable space,
     e.g. for visualization. Downstream packages such as VisionHeatmaps.jl call it as
     `pooling(val, dim)`, choosing the reduced dimension `dim` themselves.
     Defaults to [`NormPooling`](@ref).
@@ -18,7 +18,7 @@ Return type of analyzers when calling [`analyze`](@ref).
 
 `pooling` is an optional positional argument, defaulting to [`NormPooling`](@ref).
 """
-struct Explanation{V, I, O, S, P <: AbstractPooling, E <: Union{Nothing, NamedTuple}}
+struct Attribution{V, I, O, S, P <: AbstractPooling, E <: Union{Nothing, NamedTuple}}
     val::V
     input::I
     output::O
@@ -26,10 +26,10 @@ struct Explanation{V, I, O, S, P <: AbstractPooling, E <: Union{Nothing, NamedTu
     pooling::P
     extras::E
 end
-function Explanation(
+function Attribution(
         val, input, output, output_selection,
         pooling::AbstractPooling = NormPooling();
         extras::Union{Nothing, NamedTuple} = nothing,
     )
-    return Explanation(val, input, output, output_selection, pooling, extras)
+    return Attribution(val, input, output, output_selection, pooling, extras)
 end
