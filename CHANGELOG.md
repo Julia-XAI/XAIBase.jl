@@ -1,4 +1,20 @@
 # XAIBase.jl
+## Version `v5.0.0`
+* ![BREAKING][badge-breaking] Replace the `Explanation` result struct with `Attribution`:
+  * remove the `analyzer::Symbol` and `heatmap::Symbol` fields
+  * add a `pooling` field, an optional positional argument defaulting to `NormPooling()`
+* ![Feature][badge-feature] Add attribution pooling functions, fieldless subtypes of `AbstractPooling`, applied via `pool(pooling, A, dims)` or the equivalent callable syntax `pooling(A, dims)`:
+  * `SignedPooling`, with signed output: `SumPooling`, `MaxPooling`
+  * `UnsignedPooling`, with non-negative output: `SumAbsPooling`, `AbsSumPooling`, `MaxAbsPooling`, `NormPooling`, `SquaredNormPooling`
+  * identity poolings that skip the reduction: `SignedNoPooling` (unknown sign) and `UnsignedNoPooling` (non-negative, e.g. for Grad-CAM)
+* ![Feature][badge-feature] Add normalization functions, fieldless subtypes of `AbstractNormalization`, that linearly rescale pooled attributions onto the unit interval `[0, 1]`:
+  * these are applied via `XAIBase.normalize(normalization, A[, bounds])` (unexported to avoid clashes with LinearAlgebra)
+    or the equivalent callable syntax `normalization(A)`
+  * `ExtremaNormalization` maps `(minimum(A), maximum(A))` onto `[0, 1]`
+  * `CenteredNormalization` maps `(-maximum(abs, A), maximum(abs, A))` onto `[0, 1]`, mapping zero onto the midpoint `0.5`
+  * `default_normalization(pooling)` returns the matching normalization for a pooling function
+  * `normalization_bounds(normalization, A)` exposes the value range mapped onto `[0, 1]`; precomputing it over a batch normalizes all samples to a shared range for comparable heatmaps
+
 ## Version `v4.1.0`
 * ![Feature][badge-feature] Refactor `IndexSelector` to support batches ([#22])
 * ![Maintenance][badge-maintenance] Format with Runic ([#22])
