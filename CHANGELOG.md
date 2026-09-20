@@ -1,4 +1,7 @@
 # XAIBase.jl
+## Version `v5.1.0`
+* ![Feature][badge-feature] Add `XAIBase.test_interface(method, input; output_selection)`, a helper for method packages to check that a method conforms to the XAIBase interface: `analyze` returns an `Attribution`, the batch dimension of `val`/`input`/`output` is consistent, `output_selection` is a `Vector{<:CartesianIndex}` with one entry per sample, and `pooling` is an `AbstractPooling`. It adds no `Test` dependency, throwing an `InterfaceError` on a violated invariant and returning `true` otherwise ([#28])
+
 ## Version `v5.0.0`
 * ![BREAKING][badge-breaking] Replace the `Explanation` result struct with `Attribution`:
   * remove the `analyzer::Symbol` and `heatmap::Symbol` fields
@@ -69,6 +72,7 @@ This release makes VisionHeatmaps.jl and TextHeatmaps.jl strong dependencies of 
 ![Documentation][badge-docs]
 -->
 
+[#28]: https://github.com/Julia-XAI/XAIBase.jl/pull/28
 [#22]: https://github.com/Julia-XAI/XAIBase.jl/pull/22
 [#20]: https://github.com/Julia-XAI/XAIBase.jl/pull/20
 [#17]: https://github.com/Julia-XAI/XAIBase.jl/pull/17
