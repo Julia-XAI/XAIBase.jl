@@ -1,15 +1,16 @@
 # XAIBase.jl
 ## Version `v5.2.0`
-* ![Feature][badge-feature] Add composable transforms for downstream packages like VisionHeatmaps.jl and TextHeatmaps.jl:
+* ![Feature][badge-feature] Add composable transforms for downstream packages like VisionHeatmaps.jl and TextHeatmaps.jl ([#29]):
   * `AbstractTransform` is the new supertype of `AbstractPooling` and `AbstractNormalization`
   * transforms are composed into a `Pipeline` using `|>`, e.g. `NormPooling() |> ExtremaNormalization()`
   * `AbstractTransform` and `Pipeline` are not exported to avoid name clashes
-* ![Feature][badge-feature] Add batch support for downstream packages:
+* ![Feature][badge-feature] Add batch support for downstream packages ([#29]):
   * `Batch(A; dims = ndims(A))` marks an array as a batch of samples along dimension `dims`
   * `eachsample` iterates over the samples in a batch, `mapsamples` applies a function to each sample and stacks the results
   * normalization functions normalize batches sample by sample
   * `BatchedNormalization(normalization)` normalizes the whole batch at once, making heatmaps comparable across samples
   * `Batch`, `eachsample` and `mapsamples` are not exported to avoid name clashes
+* ![Maintenance][badge-maintenance] Require Julia `v1.10` (LTS) or newer ([#29])
 
 ## Version `v5.1.0`
 * ![Feature][badge-feature] Add `XAIBase.test_interface(method, input; output_selection)`, a helper for method packages to check that a method conforms to the XAIBase interface: `analyze` returns an `Attribution`, the batch dimension of `val`/`input`/`output` is consistent, `output_selection` is a `Vector{<:CartesianIndex}` with one entry per sample, and `pooling` is an `AbstractPooling`. It adds no `Test` dependency, throwing an `InterfaceError` on a violated invariant and returning `true` otherwise ([#28])
@@ -84,6 +85,7 @@ This release makes VisionHeatmaps.jl and TextHeatmaps.jl strong dependencies of 
 ![Documentation][badge-docs]
 -->
 
+[#29]: https://github.com/Julia-XAI/XAIBase.jl/pull/29
 [#28]: https://github.com/Julia-XAI/XAIBase.jl/pull/28
 [#25]: https://github.com/Julia-XAI/XAIBase.jl/pull/25
 [#22]: https://github.com/Julia-XAI/XAIBase.jl/pull/22

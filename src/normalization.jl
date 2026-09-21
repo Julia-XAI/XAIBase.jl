@@ -66,7 +66,7 @@ end
     normalize(n, A, bounds)
 
 # Batches are normalized sample by sample, unless a shared value range is passed
-normalize(n::AbstractNormalization, b::Batch) = mapsamples(x -> normalize(n, x), b)
+normalize(n::AbstractNormalization, b::Batch) = mapsamples(n, b)
 function normalize(n::AbstractNormalization, b::Batch, bounds::Tuple{<:Real, <:Real})
     return Batch(normalize(n, b.val, bounds), b.dims)
 end

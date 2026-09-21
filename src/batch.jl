@@ -8,9 +8,6 @@ Unwrapped arrays are treated as single samples.
 Downstream packages use `Batch` to distinguish transforms
 that are applied to each sample individually (the default, see [`XAIBase.mapsamples`](@ref))
 from batch-aware transforms like [`BatchedNormalization`](@ref).
-
-!!! warning "Not exported"
-    `Batch` is deliberately not exported to avoid name clashes.
 """
 struct Batch{T <: AbstractArray}
     val::T
@@ -57,21 +54,5 @@ function mapsamples(f, b::Batch, bs::Batch...)
     ys = map(f, eachsample(b), map(eachsample, bs)...)
     N = ndims(first(ys)) + 1
     dims = b.dims == ndims(b.val) ? N : min(b.dims, N)
-    return Batch(stack_samples(ys, dims), dims)
-end
-
-# Stack equally sized arrays along dimension `dims`.
-# `Base.stack` requires Julia 1.9.
-function stack_samples(ys, dims)
-    y1 = first(ys)
-    sz = size(y1)
-    T = mapreduce(eltype, promote_type, ys)
-    out = similar(y1, T, (sz[1:(dims - 1)]..., length(ys), sz[dims:end]...))
-    for (i, y) in enumerate(ys)
-        size(y) != sz && throw(
-            DimensionMismatch("samples of sizes $sz and $(size(y)) can't be stacked"),
-        )
-        selectdim(out, dims, i) .= y
-    end
-    return out
+    return Batch(stack(ys; dims), dims)
 end

@@ -1,8 +1,6 @@
 using XAIBase
 using Test
 
-using ReferenceTests
-
 @testset "XAIBase.jl" begin
     @testset verbose = true "Linting" begin
         @info "Running linting tests..."

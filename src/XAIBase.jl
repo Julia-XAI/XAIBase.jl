@@ -1,19 +1,18 @@
 module XAIBase
 
-include("compat.jl")
 include("utils.jl")
 
 """
 Abstract super type of all XAI methods.
 
-It is expected that all XAI methods are callable types that return an `Attribution`:
+XAI methods are expected to implement `call_analyzer`, returning an [`Attribution`](@ref):
 
 ```julia
-(method::AbstractXAIMethod)(input, output_selector::AbstractOutputSelector)
+call_analyzer(input, method::MyMethod, output_selector::AbstractOutputSelector; kwargs...)
 ```
 
-If this function is implemented, XAIBase will provide the `analyze` functionality
-and `heatmap` functionality by loading either VisionHeatmaps.jl or TextHeatmaps.jl.
+If this function is implemented, XAIBase provides the [`analyze`](@ref) functionality.
+The resulting attributions can be visualized using VisionHeatmaps.jl or TextHeatmaps.jl.
 """
 abstract type AbstractXAIMethod end
 

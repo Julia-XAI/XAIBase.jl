@@ -1,3 +1,4 @@
+# This file was copied from VisionHeatmaps.jl `v2.0.1`.
 # Pipelines are strongly inspired by the design of DataAugmentations.jl.
 # Notably, the usage of the `compose` function has been adapted directly.
 # DataAugmentations.jl uses the MIT License,

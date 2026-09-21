@@ -55,6 +55,17 @@ SignedNoPooling
 UnsignedNoPooling
 ```
 
+## Batches
+
+Downstream packages mark arrays as batches of samples using `Batch`.
+Transforms are applied to each sample individually by default,
+whereas batch-aware transforms like `BatchedNormalization` act on the whole batch:
+```@docs
+XAIBase.Batch
+XAIBase.eachsample
+XAIBase.mapsamples
+```
+
 ## Normalization
 
 After pooling, attributions are normalized onto the unit interval `[0, 1]` before a colormap is applied:
@@ -63,6 +74,7 @@ XAIBase.normalize
 AbstractNormalization
 ExtremaNormalization
 CenteredNormalization
+BatchedNormalization
 normalization_bounds
 default_normalization
 ```
@@ -78,18 +90,6 @@ such as VisionHeatmaps.jl and TextHeatmaps.jl.
 XAIBase.AbstractTransform
 XAIBase.Pipeline
 XAIBase.compose
-```
-
-## Batches
-
-Downstream packages mark arrays as batches of samples using `Batch`.
-Transforms are applied to each sample individually by default,
-whereas batch-aware transforms like `BatchedNormalization` act on the whole batch:
-```@docs
-XAIBase.Batch
-XAIBase.eachsample
-XAIBase.mapsamples
-BatchedNormalization
 ```
 
 ## Testing the interface

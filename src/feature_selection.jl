@@ -28,7 +28,7 @@ Select features by indices.
 
 For outputs of convolutional layers, the index refers to a feature dimension.
 
-See also See also [`TopNFeatures`](@ref).
+See also [`TopNFeatures`](@ref).
 
 $NOTE_FEATURE_SELECTOR
 
@@ -179,4 +179,4 @@ julia> top_n(A, 2)
 ```
 """
 top_n(A::AbstractMatrix, n) = mapslices(x -> top_n(x, n), A; dims = 1)
-top_n(x::AbstractArray, n) = sortperm(x; rev = true)[1:n]
+top_n(x::AbstractArray, n) = partialsortperm(x, 1:n; rev = true)
