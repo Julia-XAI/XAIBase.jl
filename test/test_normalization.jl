@@ -90,11 +90,11 @@ using XAIBase: normalize, normalization_bounds
         attr = Attribution(val, val, val, 1, SumPooling())
 
         pooled = attr.pooling(attr.val, 3)
-        @test pooled == reshape([-1.0, 2.0], 2, 1, 1, 1)
+        @test pooled == reshape([-1.0, 2.0], 2, 1, 1)
 
         n = default_normalization(attr.pooling)
         @test n isa CenteredNormalization
         # Maximum absolute value 2 maps (-2, 2) onto (0, 1)
-        @test normalize(n, pooled) == reshape([0.25, 1.0], 2, 1, 1, 1)
+        @test normalize(n, pooled) == reshape([0.25, 1.0], 2, 1, 1)
     end
 end

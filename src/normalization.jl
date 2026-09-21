@@ -18,7 +18,7 @@ The value range that is mapped onto `[0, 1]` is computed by [`normalization_boun
 
 $NOTE_NORMALIZATION
 """
-abstract type AbstractNormalization end
+abstract type AbstractNormalization <: AbstractTransform end
 
 """
     normalize(normalization, A)
@@ -64,6 +64,14 @@ end
 (n::AbstractNormalization)(A::AbstractArray) = normalize(n, A)
 (n::AbstractNormalization)(A::AbstractArray, bounds::Tuple{<:Real, <:Real}) =
     normalize(n, A, bounds)
+
+# Batches are normalized sample by sample, unless a shared value range is passed
+normalize(n::AbstractNormalization, b::Batch) = mapsamples(n, b)
+function normalize(n::AbstractNormalization, b::Batch, bounds::Tuple{<:Real, <:Real})
+    return Batch(normalize(n, b.val, bounds), b.dims)
+end
+(n::AbstractNormalization)(b::Batch) = normalize(n, b)
+(n::AbstractNormalization)(b::Batch, bounds::Tuple{<:Real, <:Real}) = normalize(n, b, bounds)
 
 """
     normalization_bounds(normalization, A)
@@ -115,6 +123,30 @@ function normalization_bounds(::CenteredNormalization, A)
     return (-hi, hi)
 end
 
+"""
+    BatchedNormalization(normalization)
+
+Normalize a whole [`XAIBase.Batch`](@ref) at once,
+computing a shared value range over all samples via [`normalization_bounds`](@ref).
+This makes heatmaps comparable across the samples in a batch.
+
+By default, normalization functions normalize each sample in a batch separately.
+On single samples, `BatchedNormalization(normalization)` behaves like `normalization`.
+
+$NOTE_NORMALIZATION
+"""
+struct BatchedNormalization{N <: AbstractNormalization} <: AbstractNormalization
+    normalization::N
+end
+function normalization_bounds(n::BatchedNormalization, A)
+    return normalization_bounds(n.normalization, A)
+end
+normalize(n::BatchedNormalization, b::Batch) = Batch(normalize(n, b.val), b.dims)
+
+function Base.show(io::IO, n::BatchedNormalization)
+    return print(io, "BatchedNormalization(", n.normalization, ")")
+end
+
 #==========================================#
 # Coupling to feature-attribution pooling  #
 #==========================================#
@@ -130,3 +162,48 @@ determined by the sign of the pooling's output:
 """
 default_normalization(::UnsignedPooling) = ExtremaNormalization()
 default_normalization(::SignedPooling) = CenteredNormalization()
+
+"""
+    issigned(pooling)
+    issigned(normalization)
+
+Return `true` if a pooling function returns signed values
+or if a normalization function is meant to be applied to signed values.
+Return `false` for unsigned values and `nothing` if the sign is unknown,
+which is the default for custom normalization functions
+and for pooling functions that subtype neither [`SignedPooling`](@ref) nor [`UnsignedPooling`](@ref).
+
+Composing a pooling function with a normalization function of a different sign emits a warning.
+Downstream packages can use `issigned` to select a suitable colormap:
+diverging for signed values, sequential for unsigned values.
+
+!!! warning "Not exported"
+    `issigned` is deliberately not exported to avoid name clashes.
+"""
+issigned(::AbstractPooling) = nothing
+issigned(::SignedPooling) = true
+issigned(::UnsignedPooling) = false
+issigned(::AbstractNormalization) = nothing
+issigned(::CenteredNormalization) = true
+issigned(::ExtremaNormalization) = false
+issigned(n::BatchedNormalization) = issigned(n.normalization)
+
+function check_normalization(p::AbstractPooling, n::AbstractNormalization)
+    expected, actual = issigned(p), issigned(n)
+    if !isnothing(expected) && !isnothing(actual) && expected != actual
+        kind(signed) = signed ? "signed" : "unsigned"
+        @warn "$p returns $(kind(expected)) values, but $n is meant for $(kind(actual)) values. Consider using $(default_normalization(p)) instead."
+    end
+    return nothing
+end
+
+# Normalizations are checked against the preceding pooling when a pipeline is composed.
+function compose(p::AbstractPooling, n::AbstractNormalization)
+    check_normalization(p, n)
+    return Pipeline(p, n)
+end
+function compose(pipe::Pipeline, n::AbstractNormalization)
+    i = findlast(t -> t isa AbstractPooling, pipe.transforms)
+    isnothing(i) || check_normalization(pipe.transforms[i], n)
+    return Pipeline(pipe.transforms..., n)
+end

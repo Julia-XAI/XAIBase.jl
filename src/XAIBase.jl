@@ -1,19 +1,18 @@
 module XAIBase
 
-include("compat.jl")
 include("utils.jl")
 
 """
 Abstract super type of all XAI methods.
 
-It is expected that all XAI methods are callable types that return an `Attribution`:
+XAI methods are expected to implement `call_analyzer`, returning an [`Attribution`](@ref):
 
 ```julia
-(method::AbstractXAIMethod)(input, output_selector::AbstractOutputSelector)
+call_analyzer(input, method::MyMethod, output_selector::AbstractOutputSelector; kwargs...)
 ```
 
-If this function is implemented, XAIBase will provide the `analyze` functionality
-and `heatmap` functionality by loading either VisionHeatmaps.jl or TextHeatmaps.jl.
+If this function is implemented, XAIBase provides the [`analyze`](@ref) functionality.
+The resulting attributions can be visualized using VisionHeatmaps.jl or TextHeatmaps.jl.
 """
 abstract type AbstractXAIMethod end
 
@@ -22,6 +21,13 @@ include("exceptions.jl")
 # Output selectors of type `AbstractOutputSelector` for class-specific attributions.
 # These are used to automatically select the maximally activated output.
 include("output_selection.jl")
+
+# Transforms of type `AbstractTransform`, e.g. pooling and normalization functions,
+# which can be composed into a `Pipeline` using `|>`.
+include("pipeline.jl")
+
+# Wrapper type `Batch` that marks arrays as batches of samples.
+include("batch.jl")
 
 # Feature-attribution pooling functions of type `AbstractPooling` that reduce
 # attributions over a feature dimension,
@@ -57,6 +63,10 @@ export SumAbsPooling, AbsSumPooling, MaxAbsPooling, NormPooling, SquaredNormPool
 export SignedNoPooling, UnsignedNoPooling
 export pool
 export AbstractNormalization, ExtremaNormalization, CenteredNormalization
+export BatchedNormalization
 export normalization_bounds, default_normalization
 # `normalize` is deliberately not exported to avoid clashing with `LinearAlgebra.normalize`
+# `AbstractTransform` and `Pipeline` are deliberately not exported to avoid name clashes,
+# e.g. with `MLJ.Pipeline`. Downstream packages that apply transforms re-export them.
+# `Batch`, `eachsample` and `mapsamples` are deliberately not exported to avoid name clashes.
 end #module

@@ -1,7 +1,7 @@
 using XAIBase
 using Test
 
-using XAIBase: pool
+using XAIBase: pool, Batch, batchdims_after_dropdims
 
 @testset "Pooling functions" begin
     # Attribution with signed values across the color-channel dimension (dims=3).
@@ -31,8 +31,8 @@ using XAIBase: pool
                 MaxAbsPooling(), NormPooling(), SquaredNormPooling(),
             )
             @test p isa AbstractPooling
-            # Pooling keeps the reduced dimension as a singleton
-            @test size(pool(p, A, 3)) == (1, 1, 1, 1)
+            # Pooling drops the reduced dimension
+            @test size(pool(p, A, 3)) == (1, 1, 1)
             # Callable syntax is equivalent to `pool`
             @test p(A, 3) == pool(p, A, 3)
         end
@@ -40,9 +40,13 @@ using XAIBase: pool
 
     @testset "Identity poolings" begin
         for p in (SignedNoPooling(), UnsignedNoPooling())
-            @test pool(p, A, 3) === A       # returned unchanged, `dims` ignored
-            @test p(A, 3) === A
-            @test pool(p, A, 1) === A
+            # Values are unchanged, singleton dimensions are dropped
+            @test pool(p, A, 1) == A[1, :, :, :]
+            @test p(A, 1) == A[1, :, :, :]
+            @test pool(p, A, (1, 2)) == A[1, 1, :, :]
+            # Identity poolings can't reduce several features
+            @test_throws ArgumentError pool(p, A, 3)
+            @test_throws ArgumentError pool(p, A, (1, 3))
         end
     end
 
@@ -65,8 +69,50 @@ using XAIBase: pool
 
     @testset "Pooling over other dimensions" begin
         B = reshape(collect(1.0:6.0), 2, 3) # pool a 2D feature matrix over dims=1
-        @test pool(SumPooling(), B, 1) ≈ sum(B; dims = 1)
-        @test pool(NormPooling(), B, 1) ≈ sqrt.(sum(abs2, B; dims = 1))
+        @test pool(SumPooling(), B, 1) ≈ vec(sum(B; dims = 1))
+        @test pool(NormPooling(), B, 1) ≈ vec(sqrt.(sum(abs2, B; dims = 1)))
+
+        C = reshape(collect(1.0:24.0), 2, 3, 4)
+        @test pool(SumPooling(), C, 2) == dropdims(sum(C; dims = 2); dims = 2)
+        @test pool(SumPooling(), C, (1, 2)) == vec(sum(C; dims = (1, 2)))
+    end
+
+    @testset "Batch dimension after dropping dimensions" begin
+        # Dropped dimensions in front of the batch dimension shift it
+        @test batchdims_after_dropdims(4, 3) == 3
+        @test batchdims_after_dropdims(4, 1) == 3
+        @test batchdims_after_dropdims(4, (1, 3)) == 2
+        @test batchdims_after_dropdims(4, [1, 2, 3]) == 1
+        @test batchdims_after_dropdims(2, 1) == 1
+
+        # Dropped dimensions behind the batch dimension don't affect it
+        @test batchdims_after_dropdims(1, 2) == 1
+        @test batchdims_after_dropdims(1, (2, 3)) == 1
+        @test batchdims_after_dropdims(2, (1, 3)) == 1
+        @test batchdims_after_dropdims(3, (1, 4, 5)) == 2
+
+        # The batch dimension can't be dropped
+        @test_throws ArgumentError batchdims_after_dropdims(3, 3)
+        @test_throws ArgumentError batchdims_after_dropdims(3, (1, 3))
+        @test_throws ArgumentError batchdims_after_dropdims(1, [1, 2])
+    end
+
+    @testset "Batches" begin
+        B = reshape(collect(1.0:24.0), 2, 3, 4)
+        p = SumPooling()
+
+        # Dropping dimensions in front of the batch dimension shifts it
+        @test pool(p, Batch(B), 1) == Batch(pool(p, B, 1); dims = 2)
+        @test pool(p, Batch(B; dims = 2), 1) == Batch(pool(p, B, 1); dims = 1)
+        @test pool(p, Batch(B), (1, 2)) == Batch(pool(p, B, (1, 2)); dims = 1)
+        @test p(Batch(B), 1) == pool(p, Batch(B), 1)
+
+        # Dimensions behind the batch dimension don't affect it
+        @test pool(p, Batch(B; dims = 1), 2) == Batch(pool(p, B, 2); dims = 1)
+
+        # The batch dimension can't be pooled
+        @test_throws ArgumentError pool(p, Batch(B), 3)
+        @test_throws ArgumentError pool(p, Batch(B), (1, 3))
     end
 
     @testset "Attribution stores pooling" begin
@@ -77,7 +123,7 @@ using XAIBase: pool
         # Pooling provided as a positional argument
         attr = Attribution(val, val, val, 1, SumPooling())
         @test attr.pooling isa SumPooling
-        @test size(pool(attr.pooling, attr.val, 3)) == (2, 2, 1, 1)
+        @test size(pool(attr.pooling, attr.val, 3)) == (2, 2, 1)
         # Positional pooling alongside keyword `extras`
         attr = Attribution(val, val, val, 1, SignedNoPooling(); extras = (; foo = 1))
         @test attr.pooling isa SignedNoPooling

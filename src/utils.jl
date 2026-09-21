@@ -5,7 +5,7 @@ Return a view onto the array `A` that contains an extra singleton batch dimensio
 This avoids allocating a new array.
 
 ## Example
-```juliarepl
+```julia-repl
 julia> A = [1 2; 3 4]
 2×2 Matrix{Int64}:
  1  2

@@ -1,8 +1,6 @@
 using XAIBase
 using Test
 
-using ReferenceTests
-
 @testset "XAIBase.jl" begin
     @testset verbose = true "Linting" begin
         @info "Running linting tests..."
@@ -32,5 +30,13 @@ using ReferenceTests
     @testset "Normalization" begin
         @info "Testing normalization..."
         include("test_normalization.jl")
+    end
+    @testset "Pipelines" begin
+        @info "Testing pipelines..."
+        include("test_pipeline.jl")
+    end
+    @testset "Batches" begin
+        @info "Testing batches..."
+        include("test_batch.jl")
     end
 end
