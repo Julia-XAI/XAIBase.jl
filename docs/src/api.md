@@ -67,6 +67,19 @@ normalization_bounds
 default_normalization
 ```
 
+## Pipelines
+
+Pooling and normalization functions are transforms,
+which can be composed into pipelines using `|>`,
+e.g. `NormPooling() |> ExtremaNormalization()`.
+How transforms are applied is defined by downstream packages
+such as VisionHeatmaps.jl and TextHeatmaps.jl.
+```@docs
+XAIBase.AbstractTransform
+XAIBase.Pipeline
+XAIBase.compose
+```
+
 ## Testing the interface
 Method packages can check that an analyzer conforms to the XAIBase interface:
 ```@docs

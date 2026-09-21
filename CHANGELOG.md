@@ -1,4 +1,10 @@
 # XAIBase.jl
+## Version `v5.2.0`
+* ![Feature][badge-feature] Add composable transforms for downstream packages like VisionHeatmaps.jl and TextHeatmaps.jl:
+  * `AbstractTransform` is the new supertype of `AbstractPooling` and `AbstractNormalization`
+  * transforms are composed into a `Pipeline` using `|>`, e.g. `NormPooling() |> ExtremaNormalization()`
+  * `AbstractTransform` and `Pipeline` are not exported to avoid name clashes
+
 ## Version `v5.1.0`
 * ![Feature][badge-feature] Add `XAIBase.test_interface(method, input; output_selection)`, a helper for method packages to check that a method conforms to the XAIBase interface: `analyze` returns an `Attribution`, the batch dimension of `val`/`input`/`output` is consistent, `output_selection` is a `Vector{<:CartesianIndex}` with one entry per sample, and `pooling` is an `AbstractPooling`. It adds no `Test` dependency, throwing an `InterfaceError` on a violated invariant and returning `true` otherwise ([#28])
 

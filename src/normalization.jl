@@ -18,7 +18,7 @@ The value range that is mapped onto `[0, 1]` is computed by [`normalization_boun
 
 $NOTE_NORMALIZATION
 """
-abstract type AbstractNormalization end
+abstract type AbstractNormalization <: AbstractTransform end
 
 """
     normalize(normalization, A)

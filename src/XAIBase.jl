@@ -23,6 +23,10 @@ include("exceptions.jl")
 # These are used to automatically select the maximally activated output.
 include("output_selection.jl")
 
+# Transforms of type `AbstractTransform`, e.g. pooling and normalization functions,
+# which can be composed into a `Pipeline` using `|>`.
+include("pipeline.jl")
+
 # Feature-attribution pooling functions of type `AbstractPooling` that reduce
 # attributions over a feature dimension,
 # e.g. to project them onto a human-interpretable space.
@@ -59,4 +63,6 @@ export pool
 export AbstractNormalization, ExtremaNormalization, CenteredNormalization
 export normalization_bounds, default_normalization
 # `normalize` is deliberately not exported to avoid clashing with `LinearAlgebra.normalize`
+# `AbstractTransform` and `Pipeline` are deliberately not exported to avoid name clashes,
+# e.g. with `MLJ.Pipeline`. Downstream packages that apply transforms re-export them.
 end #module

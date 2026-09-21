@@ -33,4 +33,8 @@ using ReferenceTests
         @info "Testing normalization..."
         include("test_normalization.jl")
     end
+    @testset "Pipelines" begin
+        @info "Testing pipelines..."
+        include("test_pipeline.jl")
+    end
 end

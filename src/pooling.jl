@@ -20,7 +20,7 @@ depending on whether their output is non-negative or signed.
 
 $NOTE_POOLING
 """
-abstract type AbstractPooling end
+abstract type AbstractPooling <: AbstractTransform end
 
 """
 Abstract super type of attribution pooling functions with unsigned output,
