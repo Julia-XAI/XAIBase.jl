@@ -28,6 +28,30 @@ MaxActivationSelector
 IndexSelector
 ```
 
+## Batches
+
+Downstream packages mark arrays as batches of samples using `Batch`.
+Transforms are applied to each sample individually by default,
+whereas batch-aware transforms like `BatchedNormalization` act on the whole batch:
+```@docs
+XAIBase.Batch
+XAIBase.eachsample
+XAIBase.mapsamples
+```
+
+## Pipelines
+
+Pooling and normalization functions are transforms,
+which can be composed into pipelines using `|>`,
+e.g. `NormPooling() |> ExtremaNormalization()`.
+How transforms are applied is defined by downstream packages
+such as VisionHeatmaps.jl and TextHeatmaps.jl.
+```@docs
+XAIBase.AbstractTransform
+XAIBase.Pipeline
+XAIBase.compose
+```
+
 ## Feature-attribution pooling
 
 XAIBase includes the following pooling functions:
@@ -55,17 +79,6 @@ SignedNoPooling
 UnsignedNoPooling
 ```
 
-## Batches
-
-Downstream packages mark arrays as batches of samples using `Batch`.
-Transforms are applied to each sample individually by default,
-whereas batch-aware transforms like `BatchedNormalization` act on the whole batch:
-```@docs
-XAIBase.Batch
-XAIBase.eachsample
-XAIBase.mapsamples
-```
-
 ## Normalization
 
 After pooling, attributions are normalized onto the unit interval `[0, 1]` before a colormap is applied:
@@ -78,19 +91,6 @@ BatchedNormalization
 normalization_bounds
 default_normalization
 XAIBase.issigned
-```
-
-## Pipelines
-
-Pooling and normalization functions are transforms,
-which can be composed into pipelines using `|>`,
-e.g. `NormPooling() |> ExtremaNormalization()`.
-How transforms are applied is defined by downstream packages
-such as VisionHeatmaps.jl and TextHeatmaps.jl.
-```@docs
-XAIBase.AbstractTransform
-XAIBase.Pipeline
-XAIBase.compose
 ```
 
 ## Testing the interface
