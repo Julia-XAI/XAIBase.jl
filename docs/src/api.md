@@ -77,6 +77,7 @@ CenteredNormalization
 BatchedNormalization
 normalization_bounds
 default_normalization
+XAIBase.issigned
 ```
 
 ## Pipelines

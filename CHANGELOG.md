@@ -4,6 +4,9 @@
   * `AbstractTransform` is the new supertype of `AbstractPooling` and `AbstractNormalization`
   * transforms are composed into a `Pipeline` using `|>`, e.g. `NormPooling() |> ExtremaNormalization()`
   * `AbstractTransform` and `Pipeline` are not exported to avoid name clashes
+  * composing a pooling function with a normalization function of a different sign emits a warning,
+    e.g. `SumPooling() |> ExtremaNormalization()`.
+    The unexported `XAIBase.issigned` returns the sign of pooling and normalization functions
 * ![Feature][badge-feature] Add batch support for downstream packages ([#29]):
   * `Batch(A; dims = ndims(A))` marks an array as a batch of samples along dimension `dims`
   * `eachsample` iterates over the samples in a batch, `mapsamples` applies a function to each sample and stacks the results

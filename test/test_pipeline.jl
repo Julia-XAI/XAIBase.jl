@@ -7,6 +7,7 @@ using XAIBase: AbstractTransform, Pipeline, compose
 struct DummyTransform <: AbstractTransform
     id::Int
 end
+struct DummyNormalization <: AbstractNormalization end
 
 @testset "Pipelines" begin
     @testset "Supertypes" begin
@@ -39,7 +40,33 @@ end
     end
 
     @testset "Printing" begin
-        pipe = NormPooling() |> CenteredNormalization()
-        @test repr(pipe) == "Pipeline(\n  NormPooling(),\n  CenteredNormalization(),\n)"
+        pipe = SumPooling() |> CenteredNormalization()
+        @test repr(pipe) == "Pipeline(\n  SumPooling(),\n  CenteredNormalization(),\n)"
+    end
+
+    @testset "Pooling and normalization pairing" begin
+        issigned = XAIBase.issigned
+        @test issigned(SumPooling())
+        @test !issigned(NormPooling())
+        @test issigned(CenteredNormalization())
+        @test !issigned(ExtremaNormalization())
+        @test issigned(BatchedNormalization(CenteredNormalization()))
+        @test isnothing(issigned(DummyNormalization()))
+
+        # Matching and unknown signs don't warn
+        @test_logs NormPooling() |> ExtremaNormalization()
+        @test_logs SumPooling() |> CenteredNormalization()
+        @test_logs SumPooling() |> DummyNormalization()
+        @test_logs DummyTransform(1) |> ExtremaNormalization()
+
+        # Mismatched signs warn
+        @test_logs (:warn, r"returns signed values") SumPooling() |> ExtremaNormalization()
+        @test_logs (:warn, r"returns unsigned values") NormPooling() |>
+            CenteredNormalization()
+        @test_logs (:warn, r"returns signed values") SumPooling() |>
+            DummyTransform(1) |>
+            BatchedNormalization(ExtremaNormalization())
+        @test_logs (:warn, r"returns signed values") SumPooling() |>
+            (ExtremaNormalization() |> DummyTransform(1))
     end
 end
