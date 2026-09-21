@@ -9,6 +9,8 @@
   * `eachsample` iterates over the samples in a batch, `mapsamples` applies a function to each sample and stacks the results
   * normalization functions normalize batches sample by sample
   * `BatchedNormalization(normalization)` normalizes the whole batch at once, making heatmaps comparable across samples
+  * `pool` accepts batches and updates their batch dimension
+* ![Bugfix][badge-bugfix] `pool` drops the pooled dimension instead of keeping it as a singleton, e.g. an array of size `(W, H, C, N)` is reduced to size `(W, H, N)`. Identity poolings `SignedNoPooling` and `UnsignedNoPooling` require a singleton feature dimension ([#29])
   * `Batch`, `eachsample` and `mapsamples` are not exported to avoid name clashes
 * ![Maintenance][badge-maintenance] Require Julia `v1.10` (LTS) or newer ([#29])
 
