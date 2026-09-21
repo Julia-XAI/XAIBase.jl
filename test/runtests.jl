@@ -37,4 +37,8 @@ using ReferenceTests
         @info "Testing pipelines..."
         include("test_pipeline.jl")
     end
+    @testset "Batches" begin
+        @info "Testing batches..."
+        include("test_batch.jl")
+    end
 end

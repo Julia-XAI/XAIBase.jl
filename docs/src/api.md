@@ -80,6 +80,18 @@ XAIBase.Pipeline
 XAIBase.compose
 ```
 
+## Batches
+
+Downstream packages mark arrays as batches of samples using `Batch`.
+Transforms are applied to each sample individually by default,
+whereas batch-aware transforms like `BatchedNormalization` act on the whole batch:
+```@docs
+XAIBase.Batch
+XAIBase.eachsample
+XAIBase.mapsamples
+BatchedNormalization
+```
+
 ## Testing the interface
 Method packages can check that an analyzer conforms to the XAIBase interface:
 ```@docs

@@ -27,6 +27,9 @@ include("output_selection.jl")
 # which can be composed into a `Pipeline` using `|>`.
 include("pipeline.jl")
 
+# Wrapper type `Batch` that marks arrays as batches of samples.
+include("batch.jl")
+
 # Feature-attribution pooling functions of type `AbstractPooling` that reduce
 # attributions over a feature dimension,
 # e.g. to project them onto a human-interpretable space.
@@ -61,8 +64,10 @@ export SumAbsPooling, AbsSumPooling, MaxAbsPooling, NormPooling, SquaredNormPool
 export SignedNoPooling, UnsignedNoPooling
 export pool
 export AbstractNormalization, ExtremaNormalization, CenteredNormalization
+export BatchedNormalization
 export normalization_bounds, default_normalization
 # `normalize` is deliberately not exported to avoid clashing with `LinearAlgebra.normalize`
 # `AbstractTransform` and `Pipeline` are deliberately not exported to avoid name clashes,
 # e.g. with `MLJ.Pipeline`. Downstream packages that apply transforms re-export them.
+# `Batch`, `eachsample` and `mapsamples` are deliberately not exported to avoid name clashes.
 end #module

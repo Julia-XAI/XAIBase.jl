@@ -65,6 +65,14 @@ end
 (n::AbstractNormalization)(A::AbstractArray, bounds::Tuple{<:Real, <:Real}) =
     normalize(n, A, bounds)
 
+# Batches are normalized sample by sample, unless a shared value range is passed
+normalize(n::AbstractNormalization, b::Batch) = mapsamples(x -> normalize(n, x), b)
+function normalize(n::AbstractNormalization, b::Batch, bounds::Tuple{<:Real, <:Real})
+    return Batch(normalize(n, b.val, bounds), b.dims)
+end
+(n::AbstractNormalization)(b::Batch) = normalize(n, b)
+(n::AbstractNormalization)(b::Batch, bounds::Tuple{<:Real, <:Real}) = normalize(n, b, bounds)
+
 """
     normalization_bounds(normalization, A)
 
@@ -113,6 +121,30 @@ struct CenteredNormalization <: AbstractNormalization end
 function normalization_bounds(::CenteredNormalization, A)
     hi = maximum(abs, A)
     return (-hi, hi)
+end
+
+"""
+    BatchedNormalization(normalization)
+
+Normalize a whole [`XAIBase.Batch`](@ref) at once,
+computing a shared value range over all samples via [`normalization_bounds`](@ref).
+This makes heatmaps comparable across the samples in a batch.
+
+By default, normalization functions normalize each sample in a batch separately.
+On single samples, `BatchedNormalization(normalization)` behaves like `normalization`.
+
+$NOTE_NORMALIZATION
+"""
+struct BatchedNormalization{N <: AbstractNormalization} <: AbstractNormalization
+    normalization::N
+end
+function normalization_bounds(n::BatchedNormalization, A)
+    return normalization_bounds(n.normalization, A)
+end
+normalize(n::BatchedNormalization, b::Batch) = Batch(normalize(n, b.val), b.dims)
+
+function Base.show(io::IO, n::BatchedNormalization)
+    return print(io, "BatchedNormalization(", n.normalization, ")")
 end
 
 #==========================================#
